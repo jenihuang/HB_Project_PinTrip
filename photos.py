@@ -3,18 +3,11 @@ import os
 import flickrapi
 import json
 
-import requests
-from flask import Flask, render_template, request, flash, redirect, session
-# from flask_debugtoolbar import DebugToolbarExtension
-
-app = Flask(__name__)
-app.secret_key = "SECRETSECRETSECRET"
-
-# api_key = u'aa1a829bc39c71156b361045742e1f12'
-# api_secret = u'124d9970980b9e6b'
+'''obtain secret key and token from environment variable'''
 api_key = os.environ.get('FLICKR_KEY')
 api_secret = os.environ.get('FLICKR_SECRET')
 
+'''creating flickr object from flickrapi library using secrety key and token'''
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
 tag = 'beach'
@@ -22,14 +15,22 @@ lat = 37.7749
 lon = 122.4194
 radius = 50
 
-photos = flickr.photos.search(
-    sort='interestingness-desc', tags='sanfrancisco,beach', per_page='9', format='json')
+'''calling flickr api function'''
+photos = flickr.photos.search(tags='sanfrancisco',
+                              sort='interestingness-desc',
+                              accuracy='11', has_geo='1', lat=lat, lon=lon,
+                              per_page='9', format='json')
 
+'''parse json data that was returned from the api call'''
 data = json.loads(photos)
 details = data['photos']['photo']
+lat = data['photos']['location']['longitude']
+lon = data['photos']['location']['longitutde']
 
+'''creating empty list to store urls from api call'''
 urls = []
 
+'''extracting url information from each photo in the results'''
 for item in range(len(details)):
     photo_id = details[item]['id']
     user = details[item]['owner']
