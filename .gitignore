@@ -6,3 +6,4 @@ env
 *.html
 *.css
 test.py
+*.txt

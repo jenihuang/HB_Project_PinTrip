@@ -21,14 +21,14 @@ app.jinja_env.undefined = StrictUndefined
 
 @app.route('/', methods=['GET'])
 def show_login():
-    """shows login form or link to signup page"""
+    '''shows login form or link to signup page'''
 
     return render_template('index.html')
 
 
 @app.route("/", methods=['GET'])
 def process_login():
-    """Log user into site and renders homepage."""
+    '''Log user into site and renders homepage.'''
 
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
@@ -48,7 +48,7 @@ def process_login():
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    """Shows signup page where users can signup for a new account"""
+    '''Shows signup page where users can signup for a new account'''
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
     # check if user email already in the database
@@ -61,7 +61,7 @@ def signup():
 
 @app.route('/homepage', methods=['GET'])
 def homepage():
-    """shows homepage of logged in user"""
+    '''shows homepage of logged in user'''
     if session['login']:
         return render_template('homepage.html')
     else:
@@ -70,7 +70,7 @@ def homepage():
 
 @app.route('/search', methods=['POST'])
 def search():
-    """Shows search page, allows user to search for photos"""
+    '''Shows search page, allows user to search for photos'''
     if session['login']:
         return render_template('search.html')
     else:

@@ -1,4 +1,4 @@
-"""Models and database functions for Tripr project."""
+"""Models and database functions for PinTrip project."""
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -90,8 +90,10 @@ class City(db.Model):
 
     city_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
-    lon = db.Column(db.Float)
-    lat = db.Column(db.Float)
+    lon = db.Column((db.Float), nullable=False)
+    lat = db.Column((db.Float), nullable=False)
+    country_code = db.Column(db.String(2))
+    timezone = db.Column(db.String(64))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
