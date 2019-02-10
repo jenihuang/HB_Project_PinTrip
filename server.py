@@ -8,7 +8,7 @@ import users
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Photo, TripBoard, City
+# from model import connect_to_db, db, User, Photo, TripBoard, City
 
 app = Flask(__name__)
 
@@ -19,14 +19,23 @@ app.secret_key = "SECRETSECRETSECRET"
 app.jinja_env.undefined = StrictUndefined
 
 
-@app.route('/', methods=['GET'])
+@app.route('/')
+def show_homepage():
+    '''shows main page for the website or user homepage if user logged in'''
+    if session.get('login'):
+        return redirect(url_for('userhome', user_id=session['login']))
+    else:
+        return render_template('homepage.html')
+
+
+@app.route('/login', methods=['GET'])
 def show_login():
     '''shows login form or link to signup page'''
 
-    return render_template('index.html')
+    return render_template('login.html')
 
 
-@app.route("/", methods=['GET'])
+@app.route("/login", methods=['GET'])
 def process_login():
     '''Log user into site and renders homepage.'''
 
@@ -37,13 +46,13 @@ def process_login():
         if user.password == input_pw:
             flash("Success!")
             session["login"] = input_email
-            return redirect('/search')
+            return redirect('/<user_id>')
         else:
             flash("Incorrect password!")
-            return redirect('/')
+            return redirect('/login')
     else:
         flash("User doesn't exist!")
-        return redirect('/')
+        return redirect('/login')
 
 
 @app.route('/signup', methods=['POST'])
@@ -59,11 +68,11 @@ def signup():
         flash('Invalid email and/or password, please try again')
 
 
-@app.route('/homepage', methods=['GET'])
-def homepage():
+@app.route('/<user_id>', methods=['GET'])
+def userhome():
     '''shows homepage of logged in user'''
     if session['login']:
-        return render_template('homepage.html')
+        return render_template('mytrips.html')
     else:
         return redirect('/')
 
@@ -75,3 +84,16 @@ def search():
         return render_template('search.html')
     else:
         return redirect('/')
+
+
+if __name__ == "__main__":
+    # We have to set debug=True here, since it has to be True at the point
+    # that we invoke the DebugToolbarExtension
+    app.debug = True
+
+    # connect_to_db(app)
+
+    # Use the DebugToolbar
+    DebugToolbarExtension(app)
+
+    app.run(host="0.0.0.0")
