@@ -71,7 +71,7 @@ def signup():
 @app.route('/<user_id>', methods=['GET'])
 def userhome():
     '''shows homepage of logged in user'''
-    if session['login']:
+    if session.get('login'):
         return render_template('mytrips.html')
     else:
         return redirect('/')
@@ -80,7 +80,7 @@ def userhome():
 @app.route('/search', methods=['POST'])
 def search():
     '''Shows search page, allows user to search for photos'''
-    if session['login']:
+    if session.get('login'):
         return render_template('search.html')
     else:
         return redirect('/')

@@ -40,6 +40,7 @@ class Photo(db.Model):
     url = db.Column(db.String(256))
     lon = db.Column(db.Float)
     lat = db.Column(db.Float)
+    likes = db.Column(db.Float, default=0)
 
     city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'))
     city = db.relationship(
@@ -63,6 +64,7 @@ class Trip(db.Model):
     img_id = db.Column(db.Integer, db.ForeignKey('photos.img_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'))
+    likes = db.Column(db.Integer, default=0)
 
     user = db.relationship('User',
                            backref=db.backref("trips", order_by=trip_id))
