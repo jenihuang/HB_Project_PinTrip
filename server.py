@@ -4,7 +4,7 @@ import flickrapi
 
 import requests
 from login_validation import *
-from get_info import *
+from get_info import cityname_is_valid, get_trip_photos, search_photos_by_city
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
@@ -164,7 +164,7 @@ def process_search():
 def explore():
     '''Shows explore page, allows user to look at popular trips'''
 
-    # not sure if below is currect to order by most likes
+    # ?not sure if below is currect to order by most likes?
     all_trips = Trip.query.order_by(Trip.likes).all()
 
     return render_template('explore.html', trips=all_trips)

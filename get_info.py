@@ -18,7 +18,7 @@ def cityname_is_valid(cityname):
     city_title_case = city_remove_whitespace.title()
     city = City.query.get(city_title_case)
 
-    return (if city)
+    return city
 
 
 # def get_user_trips(user_id):
