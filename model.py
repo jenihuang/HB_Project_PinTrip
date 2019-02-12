@@ -25,6 +25,7 @@ class User(db.Model):
     @classmethod
     def get_user_by_email(cls, email):
 
+        # User.get_user_by_email('email@gmail.com')
         return cls.query.filter(User.email=email).one()
 
 
@@ -47,10 +48,10 @@ class Photo(db.Model):
     def __repr__(self):
         return '<Image photo_id={} url={}>'.format(self.img_id, self.url)
 
-    # @classmethod
-    # def get_photo(cls, img_id):
+    @classmethod
+    def get_photo(cls, img_id):
 
-    #     return cls.query.filter(Photo.img_id=img_id).one()
+        return cls.query.filter(Photo.img_id=img_id).one()
 
 
 class Trip(db.Model):
@@ -74,10 +75,10 @@ class Trip(db.Model):
 
         return '<Trip trip_id={} city={} user_id={}>'.format(self.trip_id, self.city_name, self.user_id)
 
-    # @classmethod
-    # def get_trip(cls, trip_id):
+    @classmethod
+    def get_trip(cls, trip_id):
 
-    #     return cls.query.filter(Trip.trip_id=trip_id).one()
+        return cls.query.filter(Trip.trip_id=trip_id).one()
 
 
 class City(db.Model):
@@ -99,10 +100,10 @@ class City(db.Model):
 
         return '<User user_id={} email={}>'.format(self.user_id, self.email)
 
-    # @classmethod
-    # def get_city(cls, city_name):
+    @classmethod
+    def get_city(cls, name):
 
-    #     return cls.query.filter(City.city_name=city_name).one()
+        return cls.query.filter(City.name=name).one()
 
 
 class TripPhotoRelationship(db.Model):
