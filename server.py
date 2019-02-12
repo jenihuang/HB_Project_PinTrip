@@ -110,14 +110,15 @@ def process_signup():
 
         session['login'] = user_id
 
-        return redirect('')
+        return redirect(url_for('userhome', user_id=user_id))
 
 
-@app.route('/<user_id>', methods=['GET'])
+@app.route('/<int:user_id>', methods=['GET'])
 def userhome(user_id):
     '''shows homepage of logged in user'''
     if session.get('login') == user_id:
-        return render_template('mytrips.html')
+        user = User.query.get(user_id)
+        return render_template('mytrips.html', user=user)
     else:
         return redirect('/')
 
