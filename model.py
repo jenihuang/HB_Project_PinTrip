@@ -17,10 +17,7 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False)
     password = db.Column(db.String(64), nullable=False)
 
-    saved_img = db.Column(db.Integer, db.ForeignKey('photos.img_id'))
-
-    photo = db.relationship(
-        'Photo', backref=db.backref('users', order_by=user_id))
+    trips = db.relationship('Trip')
 
     def __repr__(self):
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
@@ -40,11 +37,12 @@ class Photo(db.Model):
     url = db.Column(db.String(256))
     lon = db.Column(db.Float)
     lat = db.Column(db.Float)
-    likes = db.Column(db.Float, default=0)
+    city_id = db.Column(db.Integer, db.ForeignKey(
+        'cities.city_id'), nullable=False)
 
-    city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'))
-    city = db.relationship(
-        'City', backref=db.backref('photos', order_by=photo_id))
+    city = db.relationship('City')
+    trips = db.relationship(
+        'Trip', secondary='trip_to_photos', backref='photos')
 
     def __repr__(self):
         return '<Image photo_id={} url={}>'.format(self.img_id, self.url)
@@ -61,19 +59,16 @@ class Trip(db.Model):
     __tablename__ = 'trips'
 
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    img_id = db.Column(db.Integer, db.ForeignKey('photos.img_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    city_id = db.Column(db.Integer, db.ForeignKey('cities.city_id'))
+    name = db.Column(db.String(64), nullable=False)
     likes = db.Column(db.Integer, default=0)
 
-    user = db.relationship('User',
-                           backref=db.backref("trips", order_by=trip_id))
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.user_id'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey(
+        'cities.city_id'), nullable=False)
 
-    photo = db.relationship('Photo',
-                            backref=db.backref("trips", order_by=trip_id))
-
-    city = db.relationship('City',
-                           backref=db.backref("trips", order_by=trip_id))
+    user = db.relationship('User')
+    city = db.relationship('City')
 
     def __repr__(self):
 
@@ -90,12 +85,14 @@ class City(db.Model):
 
     __tablename__ = 'cities'
 
-    city_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(64), primary_key=True)
     lon = db.Column((db.Float), nullable=False)
     lat = db.Column((db.Float), nullable=False)
     country_code = db.Column(db.String(2))
     timezone = db.Column(db.String(64))
+
+    trips = db.relationship('Trip')
+    photos = db.relationship('Photo')
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -111,35 +108,31 @@ class City(db.Model):
 class TripPhotoRelationship(db.Model):
     '''Maps photo to trip board'''
 
-    __tablename__ = 'trip_photos'
+    __tablename__ = 'trip_to_photos'
 
     relationship_id = db.Column(
         db.Integer, autoincrement=True, primary_key=True)
-    trip_id = db.Integer, db.ForeignKey('trips.trip_id')
-    photo_id = db.Integer, db.ForeignKey('photos.img_id')
-
-    trip = db.relationship('Trip', backref=db.backref(
-        'trip_photos', order_by=relationship_id))
-
-    photo = db.relationship('Photo', backref=db.backref(
-        'trip_photos', order_by=relationship_id))
+    trip_id = db.Column(db.Integer, db.ForeignKey(
+        'trips.trip_id'), nullable=False)
+    photo_id = db.Column(db.Integer, db.ForeignKey(
+        'photos.img_id'), nullable=False)
 
 
-class UserPhotoRelationship(db.Model):
-    '''Maps user to saved photo'''
+# class UserTripRelationship(db.Model):
+#     '''Maps user to saved photo'''
 
-    __tablename__ = 'user_photos'
+#     __tablename__ = 'user_trips'
 
-    relationship_id = db.Column(
-        db.Integer, autoincrement=True, primary_key=True)
-    user_id = db.Integer, db.ForeignKey('users.user_id')
-    photo_id = db.Integer, db.ForeignKey('photos.img_id')
+#     relationship_id = db.Column(
+#         db.Integer, autoincrement=True, primary_key=True)
+#     user_id = db.Integer, db.ForeignKey('users.user_id')
+#     trip_id = db.Integer, db.ForeignKey('trips.trip_id')
 
-    user = db.relationship('User', backref=db.backref(
-        'trip_photos', order_by=relationship_id))
+#     user = db.relationship('User', backref=db.backref(
+#         'user_trips', order_by=relationship_id))
 
-    photo = db.relationship('Photo', backref=db.backref(
-        'trip_photos', order_by=relationship_id))
+#     trip = db.relationship('Trip', backref=db.backref(
+#         'user_trips', order_by=relationship_id))
 
 
 ##############################################################################
@@ -150,7 +143,7 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///tripr'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pintrip'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
     db.app = app
