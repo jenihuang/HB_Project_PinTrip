@@ -45,4 +45,4 @@ def get_photos(cityname, tag):
         farm, server, photo_id, secret)
     urls += f'{source_url}|'
 
-  print(urls)
+    print(urls)

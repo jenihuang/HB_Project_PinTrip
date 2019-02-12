@@ -6,9 +6,9 @@ import requests
 import users
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
-# from model import connect_to_db, db, User, Photo, TripBoard, City
+from model import connect_to_db, db, User, Photo, Trip, City
 
 app = Flask(__name__)
 
@@ -41,18 +41,22 @@ def process_login():
 
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
-    user = users.Usermanager.get_user_by_email(input_email)
+
+    try:
+        user = User.get_user_by_email(input_email)
+    except:
+        flash('Sorry, that email does not exist!')
+        return redirect('/login')
+
     if user:
         if user.password == input_pw:
-            flash("Success!")
-            session["login"] = input_email
+            flash("Successfully logged in!")
+            user_id = user.user_id
+            session["login"] = user_id
             return redirect('/<user_id>')
         else:
             flash("Incorrect password!")
             return redirect('/login')
-    else:
-        flash("User doesn't exist!")
-        return redirect('/login')
 
 
 @app.route('/signup', methods=['POST'])
@@ -71,7 +75,7 @@ def signup():
 @app.route('/<user_id>', methods=['GET'])
 def userhome():
     '''shows homepage of logged in user'''
-    if session.get('login'):
+    if session.get('login') == user_id:
         return render_template('mytrips.html')
     else:
         return redirect('/')

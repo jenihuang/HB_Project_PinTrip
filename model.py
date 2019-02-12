@@ -14,7 +14,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     fname = db.Column(db.String(64), nullable=False)
     lname = db.Column(db.String(64), nullable=False)
-    email = db.Column(db.String(64), nullable=False)
+    email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
     trips = db.relationship('Trip')
@@ -23,9 +23,9 @@ class User(db.Model):
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
 
     # @classmethod
-    # def get_user(cls, user_id):
+    # def get_user_by_email(cls, email):
 
-    #     return cls.query.filter(User.user_id=user_id).one()
+    #     return cls.query.filter(User.email=email).one()
 
 
 class Photo(db.Model):
@@ -37,8 +37,8 @@ class Photo(db.Model):
     url = db.Column(db.String(256))
     lon = db.Column(db.Float)
     lat = db.Column(db.Float)
-    city_id = db.Column(db.Integer, db.ForeignKey(
-        'cities.city_id'), nullable=False)
+    city_name = db.Column(db.String(64), db.ForeignKey(
+        'cities.name'), nullable=False)
 
     city = db.relationship('City')
     trips = db.relationship(
@@ -64,15 +64,15 @@ class Trip(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.user_id'), nullable=False)
-    city_id = db.Column(db.Integer, db.ForeignKey(
-        'cities.city_id'), nullable=False)
+    city_name = db.Column(db.String(64), db.ForeignKey(
+        'cities.name'), nullable=False)
 
     user = db.relationship('User')
     city = db.relationship('City')
 
     def __repr__(self):
 
-        return '<Trip trip_id={} city_id={} user_id={}>'.format(self.trip_id, self.city_id, self.user_id)
+        return '<Trip trip_id={} city={} user_id={}>'.format(self.trip_id, self.city_name, self.user_id)
 
     # @classmethod
     # def get_trip(cls, trip_id):
@@ -100,9 +100,9 @@ class City(db.Model):
         return '<User user_id={} email={}>'.format(self.user_id, self.email)
 
     # @classmethod
-    # def get_city(cls, city_id):
+    # def get_city(cls, city_name):
 
-    #     return cls.query.filter(City.city_id=city_id).one()
+    #     return cls.query.filter(City.city_name=city_name).one()
 
 
 class TripPhotoRelationship(db.Model):

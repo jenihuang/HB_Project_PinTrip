@@ -40,7 +40,8 @@ def load_photos(photo_filename):
 
         photo = Photo(url=url,
                       lat=lat,
-                      lon=lon)
+                      lon=lon,
+                      city_name=city_name)
 
         db.session.add(photo)
 
