@@ -17,7 +17,8 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
-    trips = db.relationship('Trip')
+    trips = db.relationship(
+        'Trip', secondary='trip_user_likes_rel', backref='user')
 
     def __repr__(self):
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
@@ -26,7 +27,7 @@ class User(db.Model):
     def get_user_by_email(cls, email):
 
         # User.get_user_by_email('email@gmail.com')
-        return cls.query.filter(User.email=email).one()
+        return cls.query.filter_by(email=email).one()
 
 
 class Photo(db.Model):
@@ -43,7 +44,7 @@ class Photo(db.Model):
 
     city = db.relationship('City')
     trips = db.relationship(
-        'Trip', secondary='trip_to_photos', backref='photos')
+        'Trip', secondary='trip_photos_rel', backref='photos')
 
     def __repr__(self):
         return '<Image photo_id={} url={}>'.format(self.img_id, self.url)
@@ -51,7 +52,7 @@ class Photo(db.Model):
     @classmethod
     def get_photo(cls, img_id):
 
-        return cls.query.filter(Photo.img_id=img_id).one()
+        return cls.query.filter_by(img_id=img_id).one()
 
 
 class Trip(db.Model):
@@ -68,7 +69,6 @@ class Trip(db.Model):
     city_name = db.Column(db.String(64), db.ForeignKey(
         'cities.name'), nullable=False)
 
-    user = db.relationship('User')
     city = db.relationship('City')
 
     def __repr__(self):
@@ -78,7 +78,7 @@ class Trip(db.Model):
     @classmethod
     def get_trip(cls, trip_id):
 
-        return cls.query.filter(Trip.trip_id=trip_id).one()
+        return cls.query.filter_by(trip_id=trip_id).one()
 
 
 class City(db.Model):
@@ -103,13 +103,13 @@ class City(db.Model):
     @classmethod
     def get_city(cls, name):
 
-        return cls.query.filter(City.name=name).one()
+        return cls.query.filter_by(name=name).one()
 
 
 class TripPhotoRelationship(db.Model):
     '''Maps photo to trip board'''
 
-    __tablename__ = 'trip_to_photos'
+    __tablename__ = 'trip_photos_rel'
 
     relationship_id = db.Column(
         db.Integer, autoincrement=True, primary_key=True)
@@ -119,21 +119,17 @@ class TripPhotoRelationship(db.Model):
         'photos.img_id'), nullable=False)
 
 
-# class UserTripRelationship(db.Model):
-#     '''Maps user to saved photo'''
+class TripUserLikes(db.Model):
+    '''Tracks which users liked which boards'''
 
-#     __tablename__ = 'user_trips'
+    __tablename__ = 'trip_user_likes_rel'
 
-#     relationship_id = db.Column(
-#         db.Integer, autoincrement=True, primary_key=True)
-#     user_id = db.Integer, db.ForeignKey('users.user_id')
-#     trip_id = db.Integer, db.ForeignKey('trips.trip_id')
-
-#     user = db.relationship('User', backref=db.backref(
-#         'user_trips', order_by=relationship_id))
-
-#     trip = db.relationship('Trip', backref=db.backref(
-#         'user_trips', order_by=relationship_id))
+    relationship_id = db.Column(
+        db.Integer, autoincrement=True, primary_key=True)
+    trip_id = db.Column(db.Integer, db.ForeignKey(
+        'trips.trip_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.user_id'), nullable=False)
 
 
 ##############################################################################

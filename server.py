@@ -1,9 +1,9 @@
-from pprint import pformat, pprint
+# from pprint import pformat, pprint
 import os
 import flickrapi
 
 import requests
-from login_validation *
+from login_validation import *
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
@@ -35,7 +35,7 @@ def show_login():
     return render_template('login.html')
 
 
-@app.route("/login", methods=['GET'])
+@app.route("/login", methods=['POST'])
 def process_login():
     '''Log user into site and renders homepage.'''
 
@@ -53,26 +53,26 @@ def process_login():
             flash("Successfully logged in!")
             user_id = user.user_id
             session["login"] = user_id
-            return redirect('/<user_id>')
+            return redirect(url_for('userhome', user_id=session['login']))
         else:
             flash("Incorrect password!")
             return redirect('/login')
 
 
-@app.route('/login', methods=['GET'])
-def show_signup():
-    '''shows form for signup page'''
-
-    return render_template('signup.html')
-
-
 @app.route('/logout', methods=['GET'])
-def logout():
+def show_logout():
     '''shows logout message and redirects back to homepage'''
 
     del session['login']
     flash('Logged out')
     return redirect('/')
+
+
+@app.route('/signup', methods=['GET'])
+def show_signup():
+    '''shows form for signup page'''
+
+    return render_template('signup.html')
 
 
 @app.route('/signup', methods=['POST'])
@@ -104,14 +104,17 @@ def process_signup():
                     email=input_email, password=input_pw)
         db.session.add(user)
         db.session.commit()
+
         user = User.get_user_by_email(input_email)
         user_id = user.user_id
 
         session['login'] = user_id
 
+        return redirect('')
+
 
 @app.route('/<user_id>', methods=['GET'])
-def userhome():
+def userhome(user_id):
     '''shows homepage of logged in user'''
     if session.get('login') == user_id:
         return render_template('mytrips.html')
@@ -128,14 +131,23 @@ def search():
         return redirect('/')
 
 
+@app.route('/explore', methods=['GET'])
+def explore():
+    '''Shows explore page, allows user to look at popular trips'''
+    if session.get('login'):
+        return render_template('explore.html')
+    else:
+        return redirect('/')
+
+
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
     # that we invoke the DebugToolbarExtension
     app.debug = True
 
-    # connect_to_db(app)
+    connect_to_db(app)
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0")
