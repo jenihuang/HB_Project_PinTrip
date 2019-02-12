@@ -4,6 +4,7 @@ import flickrapi
 
 import requests
 from login_validation import *
+from get_info import *
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
@@ -125,7 +126,7 @@ def userhome(user_id):
 
 
 @app.route('/<int:user_id>/<int:trip_id>', methods=['GET'])
-def trip_details(trip_id):
+def trip_details(user_id, trip_id):
     '''shows details and photos for each trip board'''
     if session.get('login') == user_id:
         trip = Trip.get_trip(trip_id)
@@ -135,7 +136,7 @@ def trip_details(trip_id):
         return redirect('/')
 
 
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET'])
 def search():
     '''Shows search page, allows user to search for photos'''
     if session.get('login'):
@@ -144,13 +145,29 @@ def search():
         return redirect('/')
 
 
+@app.route('/search', methods=['POST'])
+def process_search():
+    '''Shows search page, allows user to search for photos'''
+    city = request.form.get('city')
+    tag = request.form.get('tag')
+
+    if cityname_is_valid(city):
+        photos = search_photos_by_city(city, tag)
+        return render_template('results.html', photos=photos)
+
+    else:
+        flash('Sorry, that city is not in our database.')
+        return redirect('/search')
+
+
 @app.route('/explore', methods=['GET'])
 def explore():
     '''Shows explore page, allows user to look at popular trips'''
-    if session.get('login'):
-        return render_template('explore.html')
-    else:
-        return redirect('/')
+
+    # not sure if below is currect to order by most likes
+    all_trips = Trip.query.order_by(Trip.likes).all()
+
+    return render_template('explore.html', trips=all_trips)
 
 
 if __name__ == "__main__":
