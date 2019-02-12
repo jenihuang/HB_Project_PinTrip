@@ -22,10 +22,10 @@ class User(db.Model):
     def __repr__(self):
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
 
-    # @classmethod
-    # def get_user_by_email(cls, email):
+    @classmethod
+    def get_user_by_email(cls, email):
 
-    #     return cls.query.filter(User.email=email).one()
+        return cls.query.filter(User.email=email).one()
 
 
 class Photo(db.Model):

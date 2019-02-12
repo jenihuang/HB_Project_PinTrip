@@ -3,7 +3,7 @@ import os
 import flickrapi
 
 import requests
-import users
+from login_validation *
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
@@ -59,17 +59,55 @@ def process_login():
             return redirect('/login')
 
 
+@app.route('/login', methods=['GET'])
+def show_signup():
+    '''shows form for signup page'''
+
+    return render_template('signup.html')
+
+
+@app.route('/logout', methods=['GET'])
+def logout():
+    '''shows logout message and redirects back to homepage'''
+
+    del session['login']
+    flash('Logged out')
+    return redirect('/')
+
+
 @app.route('/signup', methods=['POST'])
-def signup():
+def process_signup():
     '''Shows signup page where users can signup for a new account'''
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
+    fname = request.form.get('fname')
+    lname = request.form.get('lname')
+
+    # validate user email
+    if not email_isvalid(input_email):
+        flash('Sorry, not a valid email')
+        return redirect('/signup')
+
+    # validate user password
+    if not password_isvalid(input_pw):
+        flash('Password must contain 1 of: Uppercase, lowercase, number')
+        return redirect('/signup')
+
     # check if user email already in the database
-    user = users.User(input_email, input_pw)
-    if user.is_valid():
-        flash('Success!')
-    else:
-        flash('Invalid email and/or password, please try again')
+    try:
+        user = User.get_user_by_email(input_email)
+        flash('Sorry that email is already registered')
+        return redirect('/signup')
+    # if email doesn't exist, register new user and add to the database
+    except:
+        user = User(fname=fname, lname=lname,
+                    email=input_email, password=input_pw)
+        db.session.add(user)
+        db.session.commit()
+        user = User.get_user_by_email(input_email)
+        user_id = user.user_id
+
+        session['login'] = user_id
 
 
 @app.route('/<user_id>', methods=['GET'])
