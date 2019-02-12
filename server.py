@@ -117,8 +117,20 @@ def process_signup():
 def userhome(user_id):
     '''shows homepage of logged in user'''
     if session.get('login') == user_id:
-        user = User.query.get(user_id)
-        return render_template('mytrips.html', user=user)
+        user = User.get_user_by_id(user_id)
+        trips = user.trips
+        return render_template('mytrips.html', trips=trips, user=user)
+    else:
+        return redirect('/')
+
+
+@app.route('/<int:user_id>/<int:trip_id>', methods=['GET'])
+def trip_details(trip_id):
+    '''shows details and photos for each trip board'''
+    if session.get('login') == user_id:
+        trip = Trip.get_trip(trip_id)
+        photos = trip.photos
+        return render_template('tripdetails.html', trip=trip, photos=photos)
     else:
         return redirect('/')
 

@@ -24,6 +24,12 @@ class User(db.Model):
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
 
     @classmethod
+    def get_user_by_id(cls, user_id):
+
+        # User.get_user_by_id(1)
+        return cls.query.filter_by(user_id=user_id).one()
+
+    @classmethod
     def get_user_by_email(cls, email):
 
         # User.get_user_by_email('email@gmail.com')
@@ -35,7 +41,7 @@ class Photo(db.Model):
 
     __tablename__ = 'photos'
 
-    img_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    img_id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(256))
     lon = db.Column(db.Float)
     lat = db.Column(db.Float)
