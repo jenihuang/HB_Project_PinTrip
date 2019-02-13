@@ -28,13 +28,13 @@ def get_photo_location(img_id):
 
     location = {}
 
-    data = flickr.photos.geo.getLocation(photo_id=photo_id, format='json')
+    data = flickr.photos.geo.getLocation(photo_id=img_id, format='json')
     results = json.loads(data)
 
     location['lat'] = results['photo']['location']['latitude']
     location['lon'] = results['photo']['location']['longitude']
 
-    return location_details
+    return location
 
 
 def search_photos_by_city(cityname, tags=''):
@@ -63,15 +63,15 @@ def search_photos_by_city(cityname, tags=''):
 
     '''extracting url information from each photo in the results'''
     for item in range(len(details)):
-        img_id = details[item]['id']
+        img_id = int(details[item]['id'])
         farm = details[item]['farm']
         server = details[item]['server']
         secret = details[item]['secret']
         source_url = 'https://c2.staticflickr.com/{}/{}/{}_{}.jpg'.format(
             farm, server, img_id, secret)
         location = get_photo_location(img_id)
-        lat = location.get(lat)
-        lon = location.get(lon)
+        lat = float(location.get('lat'))
+        lon = float(location.get('lon'))
         photo = Photo(img_id=img_id, url=source_url,
                       lon=lon, lat=lat, city_name=city)
         photos.append(photo)
