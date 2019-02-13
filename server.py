@@ -143,7 +143,7 @@ def trip_details(user_id, trip_id):
         return redirect('/')
 
 
-@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['POST'])
+@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['GET'])
 def add_photo_to_trip(user_id, trip_id, img_id):
     '''adds a photo to the trip board for that location'''
 
@@ -157,16 +157,6 @@ def add_photo_to_trip(user_id, trip_id, img_id):
         db.session.add(trip_photo)
         db.session.commit()
 
-    return redirect('/results')
-
-
-@app.route('/remove/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['GET'])
-def remove_photo_from_trip(user_id, trip_id, img_id):
-    '''removes a photo from the trip board for that location'''
-    trip_photo = TripPhotoRelationship.query.filter(
-        TripPhotoRelationship.user_id == user_id, TripPhotoRelationship.trip_id == trip_id).one()
-    db.session.delete(trip_photo)
-    db.session.commit()
     return redirect('/results')
 
 
