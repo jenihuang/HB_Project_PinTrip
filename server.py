@@ -121,6 +121,12 @@ def userhome(user_id):
     if session.get('login') == user_id:
         user = User.get_user_by_id(user_id)
         trips = user.trips
+
+        # trip_photos = {}
+
+        # for trip in trips:
+        #     trip_photos[trip.city_name] = trip.photos[0].url
+
         return render_template('mytrips.html', trips=trips, user=user)
     else:
         return redirect('/')
@@ -142,7 +148,7 @@ def add_photo_to_trip(user_id, trip_id, img_id):
     '''adds a photo to the trip board for that location'''
 
     already_exists = TripPhotoRelationship.query.filter(
-        TripPhotoRelationship.user_id == user_id, TripPhotoRelationship.trip_id == trip_id).first()
+        TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
     if already_exists:
         flash('This photo is already in your trip board!')
@@ -179,10 +185,18 @@ def process_results():
     tag = request.form.get('tag')
     user_id = session.get('login')
 
+    #check if user input city is a valid city in the database
     if cityname_is_valid(city_name):
         city = cityname_is_valid(city_name)
         photos = search_photos_by_city(city_name, tag)
         trip = get_trip_by_user_city(user_id, city.name)
+
+        # add photo to database if not already in database
+        for photo in photos:
+            if not Photo.get_photo(photo.img_id):
+                db.session.add(photo)
+                db.session.commit()
+
         return render_template('results.html', photos=photos, trip=trip)
 
     else:
