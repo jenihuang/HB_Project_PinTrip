@@ -77,9 +77,11 @@ def search_photos_by_city(cityname, tags=''):
         secret = details[item]['secret']
         source_url = 'https://c2.staticflickr.com/{}/{}/{}_{}.jpg'.format(
             farm, server, img_id, secret)
-        location = get_photo_location(img_id)
-        lat = location.get('lat')
-        lon = location.get('lon')
+        # # location = get_photo_location(img_id)
+        # lat = location.get('lat')
+        # lon = location.get('lon')
+        lat = 2.0
+        lon = 2.0
         photo = Photo(img_id=img_id, url=source_url,
                       lon=lon, lat=lat, city_name=city)
         photos.append(photo)

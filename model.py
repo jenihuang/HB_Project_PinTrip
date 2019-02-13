@@ -64,7 +64,7 @@ class Photo(db.Model):
     @classmethod
     def get_photo(cls, img_id):
 
-        return cls.query.filter_by(img_id=img_id).one()
+        return cls.query.filter_by(img_id=img_id).first()
 
 
 class Trip(db.Model):

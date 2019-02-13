@@ -143,7 +143,7 @@ def trip_details(user_id, trip_id):
         return redirect('/')
 
 
-@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['GET'])
+@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['POST'])
 def add_photo_to_trip(user_id, trip_id, img_id):
     '''adds a photo to the trip board for that location'''
 
@@ -156,6 +156,7 @@ def add_photo_to_trip(user_id, trip_id, img_id):
         trip_photo = TripPhotoRelationship(trip_id=trip_id, photo_id=img_id)
         db.session.add(trip_photo)
         db.session.commit()
+
     return redirect('/results')
 
 
@@ -185,7 +186,7 @@ def process_results():
     tag = request.form.get('tag')
     user_id = session.get('login')
 
-    #check if user input city is a valid city in the database
+    # check if user input city is a valid city in the database
     if cityname_is_valid(city_name):
         city = cityname_is_valid(city_name)
         photos = search_photos_by_city(city_name, tag)
