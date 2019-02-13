@@ -17,7 +17,9 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
-    liked_trips = db.relationship('TripUserLikes')
+    # this below line, yields nothing/fails
+    liked_trips = db.relationship('TripUserLikes', backref='user')
+    # this line is not doing what's intended
     trips = db.relationship(
         'Trip', secondary='trip_user_likes_rel', backref='user')
 
@@ -83,7 +85,7 @@ class Trip(db.Model):
         return '<Trip trip_id={} city={} user_id={}>'.format(self.trip_id, self.city_name, self.user_id)
 
     @classmethod
-    def get_trip(cls, trip_id):
+    def get_trip(cls, trip_id): s
 
         return cls.query.filter_by(trip_id=trip_id).one()
 
