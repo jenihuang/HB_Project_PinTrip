@@ -4,7 +4,7 @@ import flickrapi
 
 import requests
 from login_validation import *
-from get_info import cityname_is_valid, get_trip_photos, search_photos_by_city
+from get_info import cityname_is_valid, search_photos_by_city
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
@@ -136,6 +136,11 @@ def trip_details(user_id, trip_id):
         return redirect('/')
 
 
+@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['POST'])
+def add_photo_to_trip(user_id, trip_id, img_id):
+    '''adds a photo to the trip board for that location'''
+
+
 @app.route('/search', methods=['GET'])
 def search():
     '''Shows search page, allows user to search for photos'''
@@ -153,7 +158,7 @@ def process_search():
 
     if cityname_is_valid(city):
         photos = search_photos_by_city(city, tag)
-        return render_template('results.html', photos=photos)
+        return render_template('results.html', photos=photos, city=city)
 
     else:
         flash('Sorry, that city is not in our database.')

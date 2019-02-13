@@ -104,7 +104,7 @@ class City(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return '<User user_id={} email={}>'.format(self.user_id, self.email)
+        return '<City name={}>'.format(self.name)
 
     @classmethod
     def get_city(cls, name):

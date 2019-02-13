@@ -36,7 +36,7 @@ def load_photos(photo_filename):
 
         # convert geolocation from string to float format
         lat = float(lat)
-        lon = float(lat)
+        lon = float(lon)
 
         photo = Photo(url=url,
                       lat=lat,
@@ -55,9 +55,9 @@ def load_cities(cities_filename):
 
     for i, row in enumerate(open(cities_filename)):
         row = row.rstrip()
-        name, lon, lat, country_code, population, timezone = row.split("|")
+        name, lat, lon, country_code, population, timezone = row.split("|")
 
-        city = City(name=name, lon=lon, lat=lat,
+        city = City(name=name, lat=lat, lon=lon,
                     country_code=country_code, timezone=timezone)
 
         # add user to the session
