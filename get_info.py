@@ -23,6 +23,13 @@ def cityname_is_valid(cityname):
     return city
 
 
+def get_trip_by_user_city(user_id, city_name):
+    # below query giving an error
+    trip = Trip.query.filter(Trip.user_id == user_id,
+                             Trip.city_name == city_name).first()
+    return trip
+
+
 def get_photo_location(img_id):
     '''get lat and lon information for photo'''
 
@@ -51,7 +58,7 @@ def search_photos_by_city(cityname, tags=''):
     photos = flickr.photos.search(tags=tags,
                                   sort='interestingness-desc',
                                   accuracy='9', has_geo='1', lat=city_lat, lon=city_lon,
-                                  per_page='10', format='json')
+                                  per_page='100', format='json')
 
     '''parse json data that was returned from the api call'''
     data = json.loads(photos)
