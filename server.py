@@ -4,12 +4,12 @@ import flickrapi
 
 import requests
 from login_validation import *
-from get_info import cityname_is_valid, search_photos_by_city
+from get_info import cityname_is_valid, search_photos_by_city, get_trip_by_user_city
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Photo, Trip, City
+from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelationship, TripUserLikes
 
 app = Flask(__name__)
 
@@ -136,9 +136,30 @@ def trip_details(user_id, trip_id):
         return redirect('/')
 
 
-@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['POST'])
+@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['GET'])
 def add_photo_to_trip(user_id, trip_id, img_id):
     '''adds a photo to the trip board for that location'''
+
+    already_exists = TripPhotoRelationship.query.filter(
+        TripPhotoRelationship.user_id == user_id, TripPhotoRelationship.trip_id == trip_id).first()
+
+    if already_exists:
+        flash('This photo is already in your trip board!')
+    else:
+        trip_photo = TripPhotoRelationship(trip_id=trip_id, photo_id=img_id)
+        db.session.add(trip_photo)
+        db.session.commit()
+    return redirect('/results')
+
+
+@app.route('/remove/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['GET'])
+def remove_photo_from_trip(user_id, trip_id, img_id):
+    '''removes a photo from the trip board for that location'''
+    trip_photo = TripPhotoRelationship.query.filter(
+        TripPhotoRelationship.user_id == user_id, TripPhotoRelationship.trip_id == trip_id).one()
+    db.session.delete(trip_photo)
+    db.session.commit()
+    return redirect('/results')
 
 
 @app.route('/search', methods=['GET'])
@@ -150,15 +171,18 @@ def search():
         return redirect('/')
 
 
-@app.route('/search', methods=['POST'])
-def process_search():
-    '''Shows search page, allows user to search for photos'''
-    city = request.form.get('city')
+@app.route('/results', methods=['POST'])
+def process_results():
+    '''Shows search results with photos found from flickr'''
+    city_name = request.form.get('city')
     tag = request.form.get('tag')
+    user_id = session.get('login')
 
-    if cityname_is_valid(city):
-        photos = search_photos_by_city(city, tag)
-        return render_template('results.html', photos=photos, city=city)
+    if cityname_is_valid(city_name):
+        city = cityname_is_valid(city_name)
+        photos = search_photos_by_city(city_name, tag)
+        trip = get_trip_by_user_city(user_id, city.name)
+        return render_template('results.html', photos=photos, trip=trip)
 
     else:
         flash('Sorry, that city is not in our database.')

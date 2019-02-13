@@ -17,6 +17,7 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
+    liked_trips = db.relationship('TripUserLikes')
     trips = db.relationship(
         'Trip', secondary='trip_user_likes_rel', backref='user')
 
@@ -41,7 +42,7 @@ class Photo(db.Model):
 
     __tablename__ = 'photos'
 
-    img_id = db.Column(db.Integer, primary_key=True)
+    img_id = db.Column(db.BigInteger, primary_key=True)
     url = db.Column(db.String(256))
     lon = db.Column(db.Float)
     lat = db.Column(db.Float)
@@ -121,7 +122,7 @@ class TripPhotoRelationship(db.Model):
         db.Integer, autoincrement=True, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey(
         'trips.trip_id'), nullable=False)
-    photo_id = db.Column(db.Integer, db.ForeignKey(
+    photo_id = db.Column(db.BigInteger, db.ForeignKey(
         'photos.img_id'), nullable=False)
 
 
@@ -148,7 +149,7 @@ def connect_to_db(app):
     # Configure to use our PostgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///pintrip'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_ECHO'] = True
+    app.config['SQLALCHEMY_ECHO'] = False
     db.app = app
     db.init_app(app)
 

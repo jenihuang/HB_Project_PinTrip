@@ -24,7 +24,7 @@ def cityname_is_valid(cityname):
 
 
 def get_trip_by_user_city(user_id, city_name):
-    # below query giving an error
+
     trip = Trip.query.filter(Trip.user_id == user_id,
                              Trip.city_name == city_name).first()
     return trip
@@ -46,7 +46,8 @@ def get_photo_location(img_id):
 
 def search_photos_by_city(cityname, tags=''):
 
-    city = cityname.strip().title()
+    city = cityname.strip()
+    city = city.title()
 
     '''obtain lon and lat info for city from the database'''
     city_object = City.query.get(city)
