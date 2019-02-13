@@ -160,6 +160,22 @@ def add_photo_to_trip(user_id, trip_id, img_id):
     return redirect('/results')
 
 
+@app.route('/<int:user_id>/remove/<int:trip_id>/<int:img_id>', methods=['GET'])
+def remove_photo_from_trip(user_id, trip_id, img_id):
+    '''removes a photo from the trip board for that location'''
+
+    already_exists = TripPhotoRelationship.query.filter(
+        TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
+
+    if already_exists:
+        db.session.delete(already_exists)
+        db.session.commit()
+    else:
+        flash('This photo is not in your trip board!')
+
+    return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
+
+
 @app.route('/search', methods=['GET'])
 def search():
     '''Shows search page, allows user to search for photos'''
