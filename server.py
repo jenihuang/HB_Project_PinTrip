@@ -11,6 +11,7 @@ from flask import Flask, render_template, request, flash, redirect, session, url
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelationship, TripUserLikes
 
+
 app = Flask(__name__)
 
 # key to use Flask session and debug toolbar

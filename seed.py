@@ -1,7 +1,7 @@
 from sqlalchemy import func
 import csv
 
-from model import User, Photo, City, Trip, connect_to_db, db
+from model import User, Photo, City, Trip, TripPhotoRelationship, TripUserLikes, LikedTrip, connect_to_db, db
 from server import app
 
 
@@ -90,6 +90,65 @@ def load_trips(trips_filename):
     db.session.commit()
 
 
+def load_trip_photos(tps_filename):
+    """Load trip_photos from file into database."""
+
+    print("Trip Photos Relationship")
+
+    for i, row in enumerate(open(tps_filename)):
+        row = row.rstrip()
+        trip_id, photo_id = row.split("|")
+
+        trip_id = int(trip_id)
+        photo_id = int(photo_id)
+
+        trip_photo = TripPhotoRelationship(trip_id=trip_id, photo_id=photo_id)
+
+        # add trip_photo to the session
+        db.session.add(trip_photo)
+
+    # commit session
+    db.session.commit()
+
+
+def load_user_likes(likes_filename):
+    """Load trip likes from file into database."""
+
+    print("Trip User Likes")
+
+    for i, row in enumerate(open(likes_filename)):
+        row = row.rstrip()
+        trip_id, user_id = row.split("|")
+
+        trip_id = int(trip_id)
+        user_id = int(user_id)
+
+        trip_photo = TripUserLikes(trip_id=trip_id, user_id=user_id)
+
+        # add trip likes to the session
+        db.session.add(trip_photo)
+
+    # commit session
+    db.session.commit()
+
+
+def load_liked_trips(likedtrips_filename):
+    """Load trip likes from file into database."""
+
+    print("Liked Trips")
+
+    for i, row in enumerate(open(likedtrips_filename)):
+        trip_id = int(row)
+
+        liked_trip = LikedTrip(trip_id=trip_id)
+
+        # add trip likes to the session
+        db.session.add(liked_trip)
+
+    # commit session
+    db.session.commit()
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     db.create_all()
@@ -98,7 +157,13 @@ if __name__ == "__main__":
     photo_filename = "seed_data/photos.txt"
     city_filename = "seed_data/cities.txt"
     trip_filename = "seed_data/trips.txt"
+    tps_filename = "seed_data/trip_photos.txt"
+    likes_filename = "seed_data/userlikes.txt"
+    likedtrips_filename = "seed_data/liked_trips.txt"
     load_users(user_filename)
     load_cities(city_filename)
     load_photos(photo_filename)
     load_trips(trip_filename)
+    load_liked_trips(likedtrips_filename)
+    load_trip_photos(tps_filename)
+    load_user_likes(likes_filename)

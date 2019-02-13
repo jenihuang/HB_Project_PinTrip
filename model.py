@@ -17,11 +17,14 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
-    # this below line, yields nothing/fails
-    liked_trips = db.relationship('TripUserLikes', backref='user')
-    # this line is not doing what's intended
-    trips = db.relationship(
-        'Trip', secondary='trip_user_likes_rel', backref='user')
+    # # this below line, yields nothing/fails
+    # liked_trips = db.relationship('TripUserLikes', backref=db.backref('user'))
+    # # this line is not doing what's intended
+    # trips = db.relationship(
+    #     'Trip', secondary='trip_user_likes_rel', backref=db.backref('user'))
+
+    # below works to connect to trips
+    trips = db.relationship('Trip', backref='user')
 
     def __repr__(self):
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
@@ -71,7 +74,6 @@ class Trip(db.Model):
 
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
-    likes = db.Column(db.Integer, default=0)
 
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.user_id'), nullable=False)
@@ -80,14 +82,26 @@ class Trip(db.Model):
 
     city = db.relationship('City')
 
+    # liked_users = db.relationship(
+    #     'User', secondary='trip_user_likes_rel', backref='trips')
+
     def __repr__(self):
 
         return '<Trip trip_id={} city={} user_id={}>'.format(self.trip_id, self.city_name, self.user_id)
 
     @classmethod
-    def get_trip(cls, trip_id): s
-
+    def get_trip(cls, trip_id):
         return cls.query.filter_by(trip_id=trip_id).one()
+
+
+class LikedTrip(db.Model):
+    '''Keeps track of trips that have been liked'''
+    __tablename__ = 'liked_trips'
+
+    trip_id = db.Column(db.Integer, primary_key=True)
+
+    users = db.relationship(
+        'User', secondary='trip_user_likes_rel', backref='liked_trips')
 
 
 class City(db.Model):
@@ -136,7 +150,7 @@ class TripUserLikes(db.Model):
     relationship_id = db.Column(
         db.Integer, autoincrement=True, primary_key=True)
     trip_id = db.Column(db.Integer, db.ForeignKey(
-        'trips.trip_id'), nullable=False)
+        'trips.trip_id'), db.ForeignKey('liked_trips.trip_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.user_id'), nullable=False)
 
