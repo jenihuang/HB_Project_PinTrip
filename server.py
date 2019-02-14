@@ -4,12 +4,12 @@ import flickrapi
 
 import requests
 from login_validation import *
-from get_info import cityname_is_valid, search_photos_by_city, get_trip_by_user_city
+from get_info import *
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelationship, TripUserLikes
+from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelationship, TripUserLikes, LikedTrip
 
 
 app = Flask(__name__)
