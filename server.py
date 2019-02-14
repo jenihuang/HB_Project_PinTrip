@@ -154,16 +154,15 @@ def userhome(user_id):
         return redirect('/')
 
 
-@app.route('/view-trip', methods=['GET'])
+@app.route('/view-trip', methods=['POST'])
 def trip_details():
     '''shows details and photos for each trip board'''
 
     trip_id = request.form.get("trip")
-    user_id = request.form.get("user")
 
     trip = Trip.get_trip(trip_id)
     photos = trip.photos
-    return render_template('tripdetails.html', user_id=user_id, trip=trip, photos=photos)
+    return render_template('tripdetails.html', trip=trip, photos=photos)
 
 
 @app.route('/<int:user_id>/add-trip', methods=['POST'])
@@ -374,6 +373,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     # Use the DebugToolbar
-    # DebugToolbarExtension(app)
+    DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0")
