@@ -122,11 +122,6 @@ def userhome(user_id):
         user = User.get_user_by_id(user_id)
         trips = user.trips
 
-        # trip_photos = {}
-
-        # for trip in trips:
-        #     trip_photos[trip.city_name] = trip.photos[0].url
-
         return render_template('mytrips.html', trips=trips, user=user)
     else:
         return redirect('/')
@@ -135,45 +130,52 @@ def userhome(user_id):
 @app.route('/<int:user_id>/<int:trip_id>', methods=['GET'])
 def trip_details(user_id, trip_id):
     '''shows details and photos for each trip board'''
-    if session.get('login') == user_id:
-        trip = Trip.get_trip(trip_id)
-        photos = trip.photos
-        return render_template('tripdetails.html', trip=trip, photos=photos)
-    else:
-        return redirect('/')
+    # if session.get('login') == user_id:
+    trip = Trip.get_trip(trip_id)
+    photos = trip.photos
+    return render_template('tripdetails.html', trip=trip, photos=photos)
+    # else:
+    #     return redirect('/')
 
 
-@app.route('/add/<int:user_id>/<int:trip_id>/<int:img_id>', methods=['GET'])
+@app.route('/<int:user_id>/add/<int:trip_id>/<int:img_id>', methods=['GET'])
 def add_photo_to_trip(user_id, trip_id, img_id):
     '''adds a photo to the trip board for that location'''
+    if user_id == session.get('login'):
+        already_exists = TripPhotoRelationship.query.filter(
+            TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
-    already_exists = TripPhotoRelationship.query.filter(
-        TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
+        if already_exists:
+            flash('This photo is already in your trip board!')
+        else:
+            trip_photo = TripPhotoRelationship(
+                trip_id=trip_id, photo_id=img_id)
+            db.session.add(trip_photo)
+            db.session.commit()
 
-    if already_exists:
-        flash('This photo is already in your trip board!')
+        return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
     else:
-        trip_photo = TripPhotoRelationship(trip_id=trip_id, photo_id=img_id)
-        db.session.add(trip_photo)
-        db.session.commit()
-
-    return redirect('/results')
+        flash('You do not have permission to access this feature')
+        return redirect('/')
 
 
 @app.route('/<int:user_id>/remove/<int:trip_id>/<int:img_id>', methods=['GET'])
 def remove_photo_from_trip(user_id, trip_id, img_id):
     '''removes a photo from the trip board for that location'''
+    if user_id == session.get('login'):
+        already_exists = TripPhotoRelationship.query.filter(
+            TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
-    already_exists = TripPhotoRelationship.query.filter(
-        TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
+        if already_exists:
+            db.session.delete(already_exists)
+            db.session.commit()
+        else:
+            flash('This photo is not in your trip board!')
 
-    if already_exists:
-        db.session.delete(already_exists)
-        db.session.commit()
+        return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
     else:
-        flash('This photo is not in your trip board!')
-
-    return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
+        flash('You do not have permission to access this feature')
+        return redirect('/')
 
 
 @app.route('/search', methods=['GET'])
@@ -215,10 +217,27 @@ def process_results():
 def explore():
     '''Shows explore page, allows user to look at popular trips'''
 
-    # ?not sure if below is currect to order by most likes?
     all_trips = Trip.query.order_by(Trip.likes).all()
 
     return render_template('explore.html', trips=all_trips)
+
+
+@app.route('/favorites', methods=['GET'])
+def show_favorites():
+    '''Shows favorites page, allows user to look at liked trips by others'''
+    if session.get('login'):
+        user_id = session.get('login')
+        liked_trips_ids = User.query.get(user_id).liked_trips
+
+        trips = []
+
+        for liked_trip in liked_trips_ids:
+            trip = Trip.query.get(liked_trip.trip_id)
+            trips.append(trip)
+
+        return render_template('favorites.html', trips=trips)
+    else:
+        return redirect('/')
 
 
 if __name__ == "__main__":
