@@ -194,15 +194,6 @@ def remove_photo_from_trip(user_id, trip_id, img_id):
         return redirect('/')
 
 
-# @app.route('/search', methods=['GET'])
-# def search():
-#     '''Shows search page, allows user to search for photos'''
-#     if session.get('login'):
-#         return render_template('search.html')
-#     else:
-#         return redirect('/')
-
-
 @app.route('/results', methods=['POST'])
 def process_results():
     '''Shows search results with photos found from flickr'''
@@ -253,6 +244,30 @@ def show_favorites():
 
         return render_template('favorites.html', trips=trips)
     else:
+        return redirect('/')
+
+
+@app.route('/favorites/add/<int:user_id>/<int:trip_id>', methods=['POST'])
+def add_to_favorites():
+    '''adds a trip to user's favorites page'''
+
+    # check if user adding is same as logged in user
+    if user_id == session.get('login'):
+        already_exists = TripUserLikes.query.filter(
+            TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.user_id == user_id)
+
+        if already_exists:
+            flash('This trip is already in your favorites list!')
+            return redirect('/favorites')
+        else:
+            fav = TripPhotoRelationship(trip_id=trip_id, user_id=user_id)
+            db.session.add(fav)
+            db.session.commit()
+            return redirect ('/favorites')
+
+    # redirect unauthorized user back to homepage
+    else:
+        flash('You do not have permission to access this feature')
         return redirect('/')
 
 

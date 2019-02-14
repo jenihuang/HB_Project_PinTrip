@@ -4,8 +4,9 @@ import os
 import flickrapi
 import json
 from flask import Flask
-from server import app
 from model import *
+
+app = Flask(__name__)
 
 ################################################################################
 
