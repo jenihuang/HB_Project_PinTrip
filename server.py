@@ -177,13 +177,13 @@ def remove_photo_from_trip(user_id, trip_id, img_id):
         return redirect('/')
 
 
-@app.route('/search', methods=['GET'])
-def search():
-    '''Shows search page, allows user to search for photos'''
-    if session.get('login'):
-        return render_template('search.html')
-    else:
-        return redirect('/')
+# @app.route('/search', methods=['GET'])
+# def search():
+#     '''Shows search page, allows user to search for photos'''
+#     if session.get('login'):
+#         return render_template('search.html')
+#     else:
+#         return redirect('/')
 
 
 @app.route('/results', methods=['POST'])
@@ -213,7 +213,7 @@ def process_results():
 
 
 @app.route('/explore', methods=['GET'])
-def explore():
+def explore_trips():
     '''Shows explore page, allows user to look at popular trips'''
 
     all_trips = Trip.query.order_by(Trip.likes).all()
