@@ -154,9 +154,12 @@ def userhome(user_id):
         return redirect('/')
 
 
-@app.route('/<int:user_id>/<int:trip_id>', methods=['GET'])
-def trip_details(user_id, trip_id):
+@app.route('/view-trip', methods=['GET'])
+def trip_details():
     '''shows details and photos for each trip board'''
+
+    trip_id = request.form.get("trip")
+    user_id = request.form.get("user")
 
     trip = Trip.get_trip(trip_id)
     photos = trip.photos
@@ -184,11 +187,14 @@ def add_trip(user_id):
     return redirect(url_for('userhome', user_id=user_id))
 
 
-@app.route('/<int:user_id>/remove/<int:trip_id>', methods=['GET'])
-def remove_trip(user_id, trip_id):
+@app.route('/remove-trip', methods=['POST'])
+def remove_trip():
     '''removes trip board from user boards'''
 
-    if user_id == session.get('login'):
+    if session.get('login'):
+
+        trip_id = request.form.get("trip")
+        user_id = request.form.get("user")
 
         try:
             trip = Trip.query.get(trip_id)
@@ -206,12 +212,15 @@ def remove_trip(user_id, trip_id):
         return redirect('/')
 
 
-@app.route('/<int:user_id>/add/<int:trip_id>/<int:img_id>', methods=['GET'])
-def add_photo_to_trip(user_id, trip_id, img_id):
+@app.route('/add-photo', methods=['POST'])
+def add_photo_to_trip():
     '''adds a photo to the trip board for that location'''
 
+    trip_id = request.form.get('trip')
+    img_id = request.form.get('photo')
+
     # checks if authorized user is accessing this page
-    if user_id == session.get('login'):
+    if session.get('login'):
 
         # check if photo already exists in current users trip
         already_exists = TripPhotoRelationship.query.filter(
@@ -227,9 +236,7 @@ def add_photo_to_trip(user_id, trip_id, img_id):
             db.session.add(trip_photo)
             db.session.commit()
 
-            return True
-
-        # return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
+            return redirect('/')
 
     # unauthorized user, redirect to homepage
     else:
@@ -243,10 +250,9 @@ def remove_photo_from_trip():
 
     trip_id = request.form.get("trip")
     img_id = request.form.get("photo")
-    user_id = request.form.get("user")
 
     # checks if authorized user is accessing this page
-    if user_id == session.get('login'):
+    if session.get('login'):
         already_exists = TripPhotoRelationship.query.filter(
             TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
@@ -257,7 +263,7 @@ def remove_photo_from_trip():
         else:
             flash('This photo is not in your trip board!')
 
-        return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
+        return redirect(url_for('trip_details', user_id=session.get('login'), trip_id=trip_id))
 
     # unauthorized user, redirect to homepage
     else:
@@ -329,16 +335,19 @@ def show_favorites():
         return redirect('/')
 
 
-@app.route('/favorites/add/<int:user_id>/<int:trip_id>', methods=['GET'])
+@app.route('/add-fav', methods=['POST'])
 def add_to_favorites():
     '''adds a trip to user's favorites page'''
 
+    user_id = request.form.get('user')
+    trip_id = request.form.get('trip')
+
     # check if user adding is same as logged in user
-    if user_id == session.get('login'):
+    if session.get('login'):
 
         # check if trip is already a favorite for user
         already_exists = TripUserLikes.query.filter(
-            TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.user_id == user_id)
+            TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id)
 
         if already_exists:
             flash('This trip is already in your favorites list!')
