@@ -129,12 +129,29 @@ def userhome(user_id):
 @app.route('/<int:user_id>/<int:trip_id>', methods=['GET'])
 def trip_details(user_id, trip_id):
     '''shows details and photos for each trip board'''
-    # if session.get('login') == user_id:
+
     trip = Trip.get_trip(trip_id)
     photos = trip.photos
     return render_template('tripdetails.html', trip=trip, photos=photos)
-    # else:
-    #     return redirect('/')
+
+
+@app.route('/<int:user_id>/add-trip', methods=['POST'])
+def add_trip(user_id):
+    '''adds trip board for user for city from form input'''
+    trip_name = request.form.get('name')
+    city_name = request.form.get('city')
+
+    # check if user input city is a valid city in the database
+    if cityname_is_valid(city_name):
+        # add trip to the database for current user
+        city = city_name.strip().title()
+        trip = Trip(name=trip_name, user_id=user_id, city_name=city)
+        db.session.add(trip)
+        db.session.commit()
+    else:
+        flash('Sorry, that city is not available in the database.')
+
+    return redirect(url_for('userhome', user_id=user_id))
 
 
 @app.route('/<int:user_id>/add/<int:trip_id>/<int:img_id>', methods=['GET'])
@@ -216,7 +233,7 @@ def process_results():
 def explore_trips():
     '''Shows explore page, allows user to look at popular trips'''
 
-    all_trips = Trip.query.order_by(Trip.likes).all()
+    all_trips = Trip.query.all()
 
     return render_template('explore.html', trips=all_trips)
 
