@@ -3,8 +3,7 @@ import os
 import flickrapi
 
 import requests
-from login_validation import *
-from get_info import *
+from helper_functions import *
 
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
