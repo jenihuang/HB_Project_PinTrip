@@ -23,8 +23,12 @@ app.jinja_env.undefined = StrictUndefined
 @app.route('/')
 def show_homepage():
     '''shows main page for the website or user homepage if user logged in'''
+
+    # if someone is logged in, redirect user to his/her homepage
     if session.get('login'):
         return redirect(url_for('userhome', user_id=session['login']))
+
+    # no user is logged in, redirect to the website homepage
     else:
         return render_template('homepage.html')
 
@@ -38,23 +42,34 @@ def show_login():
 
 @app.route("/login", methods=['POST'])
 def process_login():
-    '''Log user into site and renders homepage.'''
+    '''Logs user into site and renders homepage.'''
 
+    # get login information from the form inputs
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
 
+    # try to see if the user already exists in the database
     try:
         user = User.get_user_by_email(input_email)
+
+    # no user in the database, flash error and redirect back to login page
     except:
         flash('Sorry, that email does not exist!')
         return redirect('/login')
 
+    # if the user is in the database from above step
     if user:
+
+        # check password is same as form input
         if user.password == input_pw:
             flash("Successfully logged in!")
             user_id = user.user_id
+
+            # add verified user to the current session
             session["login"] = user_id
             return redirect(url_for('userhome', user_id=session['login']))
+
+        # password in the database is different than form input, redirect back to login
         else:
             flash("Incorrect password!")
             return redirect('/login')
@@ -64,6 +79,7 @@ def process_login():
 def show_logout():
     '''shows logout message and redirects back to homepage'''
 
+    # removes current user from the session for login
     del session['login']
     flash('Logged out')
     return redirect('/')
@@ -79,6 +95,8 @@ def show_signup():
 @app.route('/signup', methods=['POST'])
 def process_signup():
     '''Shows signup page where users can signup for a new account'''
+
+    # get registration information from form inputs
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
     fname = request.form.get('fname')
@@ -99,16 +117,20 @@ def process_signup():
         user = User.get_user_by_email(input_email)
         flash('Sorry that email is already registered')
         return redirect('/signup')
+
     # if email doesn't exist, register new user and add to the database
     except:
+        # create new instance of user object and add to the database
         user = User(fname=fname, lname=lname,
                     email=input_email, password=input_pw)
         db.session.add(user)
         db.session.commit()
 
+        # get user object from the database for current user
         user = User.get_user_by_email(input_email)
         user_id = user.user_id
 
+        # add current user's id to the session
         session['login'] = user_id
 
         return redirect(url_for('userhome', user_id=user_id))
@@ -117,11 +139,17 @@ def process_signup():
 @app.route('/<int:user_id>', methods=['GET'])
 def userhome(user_id):
     '''shows homepage of logged in user'''
+
+    # if the session login id matches the route user_id
     if session.get('login') == user_id:
         user = User.get_user_by_id(user_id)
+
+        # get current user's trips and pass it to mytrips.html for rendering
         trips = user.trips
 
         return render_template('mytrips.html', trips=trips, user=user)
+
+    # unauthorized user trying to access page, redirect to homepage
     else:
         return redirect('/')
 
@@ -138,11 +166,13 @@ def trip_details(user_id, trip_id):
 @app.route('/<int:user_id>/add-trip', methods=['POST'])
 def add_trip(user_id):
     '''adds trip board for user for city from form input'''
+
     trip_name = request.form.get('name')
     city_name = request.form.get('city')
 
     # check if user input city is a valid city in the database
     if cityname_is_valid(city_name):
+
         # add trip to the database for current user
         city = city_name.strip().title()
         trip = Trip(name=trip_name, user_id=user_id, city_name=city)
@@ -157,12 +187,18 @@ def add_trip(user_id):
 @app.route('/<int:user_id>/add/<int:trip_id>/<int:img_id>', methods=['GET'])
 def add_photo_to_trip(user_id, trip_id, img_id):
     '''adds a photo to the trip board for that location'''
+
+    # checks if authorized user is accessing this page
     if user_id == session.get('login'):
+
+        # check if photo already exists in current users trip
         already_exists = TripPhotoRelationship.query.filter(
             TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
         if already_exists:
             flash('This photo is already in your trip board!')
+
+        # photo is not in current trip board, add relationship to the database
         else:
             trip_photo = TripPhotoRelationship(
                 trip_id=trip_id, photo_id=img_id)
@@ -170,6 +206,8 @@ def add_photo_to_trip(user_id, trip_id, img_id):
             db.session.commit()
 
         return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
+
+    # unauthorized user, redirect to homepage
     else:
         flash('You do not have permission to access this feature')
         return redirect('/')
@@ -178,10 +216,13 @@ def add_photo_to_trip(user_id, trip_id, img_id):
 @app.route('/<int:user_id>/remove/<int:trip_id>/<int:img_id>', methods=['GET'])
 def remove_photo_from_trip(user_id, trip_id, img_id):
     '''removes a photo from the trip board for that location'''
+
+    # checks if authorized user is accessing this page
     if user_id == session.get('login'):
         already_exists = TripPhotoRelationship.query.filter(
             TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
+        # photo is in current trip board, delete relationship from the database
         if already_exists:
             db.session.delete(already_exists)
             db.session.commit()
@@ -189,6 +230,8 @@ def remove_photo_from_trip(user_id, trip_id, img_id):
             flash('This photo is not in your trip board!')
 
         return redirect(url_for('trip_details', user_id=user_id, trip_id=trip_id))
+
+    # unauthorized user, redirect to homepage
     else:
         flash('You do not have permission to access this feature')
         return redirect('/')
@@ -197,6 +240,8 @@ def remove_photo_from_trip(user_id, trip_id, img_id):
 @app.route('/results', methods=['POST'])
 def process_results():
     '''Shows search results with photos found from flickr'''
+
+    # get form inputs from search
     city_name = request.form.get('city')
     tag = request.form.get('tag')
     user_id = session.get('login')
@@ -215,15 +260,17 @@ def process_results():
 
         return render_template('results.html', photos=photos, trip=trip)
 
+    # user input is not a valid city in the database, redirect to homepage
     else:
         flash('Sorry, that city is not in our database.')
-        return redirect('/search')
+        return redirect('/')
 
 
 @app.route('/explore', methods=['GET'])
 def explore_trips():
     '''Shows explore page, allows user to look at popular trips'''
 
+    # gets all trips in the database and passes to explore.html to render
     all_trips = Trip.query.all()
 
     return render_template('explore.html', trips=all_trips)
@@ -232,17 +279,24 @@ def explore_trips():
 @app.route('/favorites', methods=['GET'])
 def show_favorites():
     '''Shows favorites page, allows user to look at liked trips by others'''
+
+    # check if user is logged in
     if session.get('login'):
         user_id = session.get('login')
+
+        # gets user's favorite trip_ids from the database
         liked_trips_ids = User.query.get(user_id).liked_trips
 
         trips = []
 
+        # look up trip ids and append trip objects to trips list
         for liked_trip in liked_trips_ids:
             trip = Trip.query.get(liked_trip.trip_id)
             trips.append(trip)
 
         return render_template('favorites.html', trips=trips)
+
+    # user is not logged in, redirect to homepage
     else:
         return redirect('/')
 
@@ -253,17 +307,21 @@ def add_to_favorites():
 
     # check if user adding is same as logged in user
     if user_id == session.get('login'):
+
+        # check if trip is already a favorite for user
         already_exists = TripUserLikes.query.filter(
             TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.user_id == user_id)
 
         if already_exists:
             flash('This trip is already in your favorites list!')
             return redirect('/favorites')
+
+        # if trip is not in the favorites already, add trip to favorites in the database
         else:
-            fav = TripPhotoRelationship(trip_id=trip_id, user_id=user_id)
+            fav = TripUserLikes(trip_id=trip_id, user_id=user_id)
             db.session.add(fav)
             db.session.commit()
-            return redirect ('/favorites')
+            return redirect('/favorites')
 
     # redirect unauthorized user back to homepage
     else:
