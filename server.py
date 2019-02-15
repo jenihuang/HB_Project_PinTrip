@@ -5,6 +5,7 @@ import flickrapi
 import requests
 from helper_functions import *
 
+from sqlalchemy.exc import IntegrityError, InvalidRequestError
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
@@ -216,10 +217,20 @@ def add_photo_to_trip():
     '''adds a photo to the trip board for that location'''
 
     trip_id = request.form.get('trip')
-    img_id = request.form.get('photo')
+    img_id = int(request.form.get('photo'))
+    url = request.form.get('photo')
+    lat = float(request.form.get('photo'))
+    lon = float(request.form.get('photo'))
+    city_name = request.form.get('photo')
 
     # checks if authorized user is accessing this page
     if session.get('login'):
+
+        if not Photo.query.get(img_id):
+            photo = Photo(img_id=img_id, url=url,
+                          lon=lon, lat=lat, city_name=city_name)
+            db.session.add(photo)
+            db.session.commit()
 
         # check if photo already exists in current users trip
         already_exists = TripPhotoRelationship.query.filter(
@@ -285,11 +296,14 @@ def process_results():
         photos = search_photos_by_city(city_name, tag)
         trip = get_trip_by_user_city(user_id, city.name)
 
-        # add photo to database if not already in database
-        for photo in photos:
-            if not Photo.get_photo(photo.img_id):
-                db.session.add(photo)
-                db.session.commit()
+        # # add photo to database if not already in database
+        # for photo in photos:
+        #     try:
+        #         db.session.add(photo)
+        #         db.session.commit()
+        #     except:
+        #         db.session.rollback()
+        #         continue
 
         return render_template('results.html', photos=photos, trip=trip)
 
@@ -338,7 +352,7 @@ def show_favorites():
 def add_to_favorites():
     '''adds a trip to user's favorites page'''
 
-    user_id = request.form.get('user')
+    user_id = session.get('login')
     trip_id = request.form.get('trip')
 
     # check if user adding is same as logged in user
@@ -372,7 +386,7 @@ if __name__ == "__main__":
 
     connect_to_db(app)
 
-    # Use the DebugToolbar
+    # # Use the DebugToolbar
     DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0")
