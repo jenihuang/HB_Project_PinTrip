@@ -17,13 +17,6 @@ class User(db.Model):
     email = db.Column(db.String(64), nullable=False, unique=True)
     password = db.Column(db.String(64), nullable=False)
 
-    # # this below line, yields nothing/fails
-    # liked_trips = db.relationship('TripUserLikes', backref=db.backref('user'))
-    # # this line is not doing what's intended
-    # trips = db.relationship(
-    #     'Trip', secondary='trip_user_likes_rel', backref=db.backref('user'))
-
-    # below works to connect to trips
     trips = db.relationship('Trip', backref='user')
 
     def __repr__(self):
@@ -82,9 +75,6 @@ class Trip(db.Model):
 
     city = db.relationship('City')
 
-    # liked_users = db.relationship(
-    #     'User', secondary='trip_user_likes_rel', backref='trips')
-
     def __repr__(self):
 
         return '<Trip trip_id={} city={} user_id={}>'.format(self.trip_id, self.city_name, self.user_id)
@@ -96,6 +86,7 @@ class Trip(db.Model):
 
 class LikedTrip(db.Model):
     '''Keeps track of trips that have been liked'''
+
     __tablename__ = 'liked_trips'
 
     trip_id = db.Column(db.Integer, primary_key=True)
@@ -130,7 +121,7 @@ class City(db.Model):
 
 
 class TripPhotoRelationship(db.Model):
-    '''Maps photo to trip board'''
+    '''Relationship between photo and trip board'''
 
     __tablename__ = 'trip_photos_rel'
 

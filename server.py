@@ -1,11 +1,10 @@
 # from pprint import pformat, pprint
-import os
-import flickrapi
+# import os
+# import flickrapi
 
 import requests
 from helper_functions import *
 
-from sqlalchemy.exc import IntegrityError, InvalidRequestError
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_debugtoolbar import DebugToolbarExtension
@@ -163,7 +162,9 @@ def trip_details():
 
     trip = Trip.get_trip(trip_id)
     photos = trip.photos
-    return render_template('tripdetails.html', trip=trip, photos=photos)
+    user = session.get('login')
+
+    return render_template('tripdetails.html', user=user, trip=trip, photos=photos)
 
 
 @app.route('/<int:user_id>/add-trip', methods=['POST'])
@@ -217,18 +218,18 @@ def add_photo_to_trip():
     '''adds a photo to the trip board for that location'''
 
     trip_id = request.form.get('trip')
-    img_id = int(request.form.get('photo'))
-    url = request.form.get('photo')
-    lat = float(request.form.get('photo'))
-    lon = float(request.form.get('photo'))
-    city_name = request.form.get('photo')
+    img_id = request.form.get('img_id')
+    url = request.form.get('url')
+    lat = request.form.get('lat')
+    lon = request.form.get('lon')
+    city_name = request.form.get('city_name')
 
     # checks if authorized user is accessing this page
     if session.get('login'):
 
         if not Photo.query.get(img_id):
-            photo = Photo(img_id=img_id, url=url,
-                          lon=lon, lat=lat, city_name=city_name)
+            photo = Photo(img_id=int(img_id), url=url,
+                          lon=float(lon), lat=float(lat), city_name=city_name)
             db.session.add(photo)
             db.session.commit()
 
@@ -237,7 +238,8 @@ def add_photo_to_trip():
             TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
         if already_exists:
-            return flash('This photo is already in your trip board!')
+            flash('This photo is already in your trip board!')
+            return redirect()
 
         # photo is not in current trip board, add relationship to the database
         else:
@@ -246,12 +248,12 @@ def add_photo_to_trip():
             db.session.add(trip_photo)
             db.session.commit()
 
-            return redirect('/')
+            return 'Photo Added'
 
     # unauthorized user, redirect to homepage
     else:
         flash('You do not have permission to access this feature')
-        return redirect('/')
+        return 'Unauthorized User: Photo Not Added'
 
 
 @app.route('/remove-photo', methods=['POST'])
@@ -272,13 +274,14 @@ def remove_photo_from_trip():
             db.session.commit()
         else:
             flash('This photo is not in your trip board!')
+            return redirect('/')
 
-        return redirect(url_for('trip_details', user_id=session.get('login'), trip_id=trip_id))
+        return 'Successfully removed'
 
     # unauthorized user, redirect to homepage
     else:
         flash('You do not have permission to access this feature')
-        return redirect('/')
+        return 'Error: Photo not removed.'
 
 
 @app.route('/results', methods=['POST'])
@@ -383,6 +386,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     # # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     app.run(host="0.0.0.0")
