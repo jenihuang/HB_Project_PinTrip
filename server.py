@@ -355,7 +355,6 @@ def add_to_favorites():
         # check if trip is already a favorite for user
         already_exists = TripUserLikes.query.filter(
             TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id).first()
-        print(already_exists)
 
         if already_exists:
             flash('This trip is already in your favorites list!')
