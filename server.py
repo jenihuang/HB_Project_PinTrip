@@ -319,7 +319,7 @@ def explore_trips():
 
 @app.route('/favorites', methods=['GET'])
 def show_favorites():
-    '''Shows favorites page, allows user to look at liked trips by others'''
+    '''Shows favorites page saved by user'''
 
     # check if user is logged in
     if session.get('login'):
