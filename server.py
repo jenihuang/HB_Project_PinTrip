@@ -296,15 +296,6 @@ def process_results():
         photos = search_photos_by_city(city_name, tag)
         trip = get_trip_by_user_city(user_id, city.name)
 
-        # # add photo to database if not already in database
-        # for photo in photos:
-        #     try:
-        #         db.session.add(photo)
-        #         db.session.commit()
-        #     except:
-        #         db.session.rollback()
-        #         continue
-
         return render_template('results.html', photos=photos, trip=trip)
 
     # user input is not a valid city in the database, redirect to homepage
@@ -360,7 +351,8 @@ def add_to_favorites():
 
         # check if trip is already a favorite for user
         already_exists = TripUserLikes.query.filter(
-            TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id)
+            TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id).first()
+        print(already_exists)
 
         if already_exists:
             flash('This trip is already in your favorites list!')
@@ -368,6 +360,10 @@ def add_to_favorites():
 
         # if trip is not in the favorites already, add trip to favorites in the database
         else:
+            trip = LikedTrip(trip_id=trip_id)
+            db.session.add(trip)
+            db.session.commit()
+
             fav = TripUserLikes(trip_id=trip_id, user_id=user_id)
             db.session.add(fav)
             db.session.commit()

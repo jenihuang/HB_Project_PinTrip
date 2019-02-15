@@ -115,7 +115,7 @@ def search_photos_by_city(cityname, tags=''):
     photos = flickr.photos.search(tags=tags,
                                   sort='interestingness-desc',
                                   accuracy='9', has_geo='1', lat=city_lat, lon=city_lon,
-                                  per_page='200', format='json')
+                                  per_page='50', format='json')
 
     '''parse json data that was returned from the api call'''
     data = json.loads(photos)
