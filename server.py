@@ -238,8 +238,7 @@ def add_photo_to_trip():
             TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
 
         if already_exists:
-            flash('This photo is already in your trip board!')
-            return redirect()
+            return ('This photo is already in your trip board!')
 
         # photo is not in current trip board, add relationship to the database
         else:
@@ -273,8 +272,7 @@ def remove_photo_from_trip():
             db.session.delete(already_exists)
             db.session.commit()
         else:
-            flash('This photo is not in your trip board!')
-            return redirect('/')
+            return ('This photo is not in your trip board!')
 
         return 'Successfully removed'
 
