@@ -227,6 +227,7 @@ def add_photo_to_trip():
     # checks if authorized user is accessing this page
     if session.get('login'):
 
+        # if photo is not in the database, add it to the database
         if not Photo.query.get(img_id):
             photo = Photo(img_id=int(img_id), url=url,
                           lon=float(lon), lat=float(lat), city_name=city_name)
@@ -370,6 +371,36 @@ def add_to_favorites():
             return redirect('/favorites')
 
     # redirect unauthorized user back to homepage
+    else:
+        flash('You do not have permission to access this feature')
+        return redirect('/')
+
+
+@app.route('/remove-fav', methods=['POST'])
+def remove_from_favorites():
+    '''removes trip board from user favorite boards'''
+
+    user_id = session.get('login')
+    trip_id = request.form.get('trip')
+
+    if session.get('login'):
+
+        # check if trip is already a favorite for user
+        already_exists = TripUserLikes.query.filter(
+            TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id).first()
+
+        if already_exists:
+
+            db.session.delete(already_exists)
+            db.session.commit()
+            return redirect('/favorites')
+
+        # if trip is not in the favorites, flash error message
+        else:
+
+            flash('This trip is not in your favorites list!')
+            return redirect('/favorites')
+
     else:
         flash('You do not have permission to access this feature')
         return redirect('/')
