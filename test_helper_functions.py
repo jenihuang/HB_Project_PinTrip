@@ -86,6 +86,51 @@ class TestDatabaseHelpers(unittest.TestCase):
         result = User.get_user_by_email('test@testing.com')
         self.assertEqual(None, result)
 
+    def test_get_photo(self):
+        ''' Test obtaining photo from the database by id '''
+
+        result = Photo.get_photo(43472061031)
+        self.assertEqual('Napa', result.city.name)
+
+        result = Photo.get_photo(1)
+        self.assertEqual(None, result)
+
+    def test_get_trip(self):
+        ''' Test obtaining trip from the database by id '''
+
+        result = Trip.get_trip(1)
+        self.assertEqual('taySF', result.name)
+
+        result = Trip.get_trip(2)
+        self.assertEqual(None, result)
+
+    def test_get_city(self):
+        ''' Test obtaining city from the database by city name'''
+
+        result = City.get_city('San Francisco')
+        self.assertEqual('San Francisco', result.name)
+
+        result = City.get_city('hello')
+        self.assertEqual(None, result)
+
+    def test_get_trip_photo(self):
+        ''' Test obtaining photo in trip relationship from the database '''
+
+        result = TripPhotoRelationship.get_trip_photo(1, 46629768792)
+        self.assertEqual(42, result.relationship_id)
+
+        result = TripPhotoRelationship.get_trip_photo(1, 1)
+        self.assertEqual(None, result)
+
+    def test_get_liked_trip(self):
+        ''' Test obtaining user liked trip relationship from the database '''
+
+        result = TripUserLikes.get_liked_trip(1, 2)
+        self.assertEqual(2, result.relationship_id)
+
+        result = TripUserLikes.get_liked_trip(2, 1)
+        self.assertEqual(None, result)
+
 
 # class FlaskTestsDatabase(unittest.TestCase):
 #     ''' Flask route tests that use the database '''
