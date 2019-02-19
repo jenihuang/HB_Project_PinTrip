@@ -32,7 +32,7 @@ class User(db.Model):
     def get_user_by_email(cls, email):
 
         # User.get_user_by_email('email@gmail.com')
-        return cls.query.filter_by(email=email).one()
+        return cls.query.filter_by(email=email).first()
 
 
 class Photo(db.Model):
