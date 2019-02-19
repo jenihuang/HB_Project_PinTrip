@@ -418,20 +418,20 @@ def test_map():
 
     trip_id = request.form.get('trip-map')
     trip = Trip.query.get(1)
+    photos = trip.photos
+
     lon = trip.city.lon
     lat = trip.city.lat
-    coordinate = {"lon": lon, "lat": lat}
+    city_geo = {"lon": lon, "lat": lat}
 
-    photos = {
-        photo.img_id: {
-            'img_id': photo.img_id,
-            'url': photo.url,
-            'lat': photo.lat,
-            'lon': photo.lon
-        }
-        for photo in trip.photos}
+    trip_photos = []
 
-    return render_template('testmapbox.html', photos=photos, coordinate=json.dumps(coordinate))
+    for photo in photos:
+        photo_details = {'img_id': photo.img_id,
+                         'url': photo.url, 'lat': photo.lat, 'lon': photo.lon}
+        trip_photos.append(photo_details)
+
+    return render_template('testmapbox.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
 
 
 @app.route('/get_map')
