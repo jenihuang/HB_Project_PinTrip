@@ -431,7 +431,7 @@ def get_map():
                          'url': photo.url, 'lat': photo.lat, 'lon': photo.lon}
         trip_photos.append(photo_details)
 
-    return render_template('testmapbox.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
+    return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
 
 
 @app.route('/map.json')
