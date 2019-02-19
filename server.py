@@ -418,6 +418,9 @@ def test_map():
 
     trip_id = request.form.get('trip-map')
     trip = Trip.query.get(1)
+    lon = trip.city.lon
+    lat = trip.city.lat
+    coordinate = {"lon": lon, "lat": lat}
 
     photos = {
         photo.img_id: {
@@ -428,7 +431,7 @@ def test_map():
         }
         for photo in trip.photos}
 
-    return render_template('testmapbox.html', photos=photos, key=map_box_key)
+    return render_template('testmapbox.html', photos=photos, coordinate=json.dumps(coordinate))
 
 
 @app.route('/get_map')
