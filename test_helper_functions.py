@@ -1,6 +1,5 @@
 import unittest
 from flask import Flask
-import json
 from server import app
 from model import *
 from helper_functions import *
@@ -12,7 +11,7 @@ class TestLoginFunctions(unittest.TestCase):
         self.assertEqual(email_isvalid('j@yahoo.com'), True)
         self.assertEqual(email_isvalid('beyonce32@gmail.com'), True)
         self.assertEqual(email_isvalid('12345@gmail.com'), True)
-        self.assertEqual(email_isvalid('jk@blue@gmail.com'), False)
+        self.assertEqual(email_isvalid('blue@gmailcom'), False)
         self.assertEqual(email_isvalid('abc!@#123@gmail.com'), False)
 
     def test_password_isvalid(self):
@@ -23,7 +22,7 @@ class TestLoginFunctions(unittest.TestCase):
         self.assertEqual(password_isvalid('!#@$Aa5'), True)
 
 
-class TestDatabaseFunctions(unittest.TestCase):
+class TestDatabaseHelpers(unittest.TestCase):
     def test_cityname_is_valid(self):
         self.assertEqual(cityname_is_valid(
             'san francisco'), True)

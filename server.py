@@ -62,8 +62,8 @@ def process_login():
     # if the user is in the database from above step
     if user:
 
-        # check password is same as form input
-        if user.password == input_pw:
+        # check if password is same as hashed form input
+        if user.password == hash(input_pw):
             flash("Successfully logged in!")
             user_id = user.user_id
 
@@ -123,8 +123,9 @@ def process_signup():
     # if email doesn't exist, register new user and add to the database
     except:
         # create new instance of user object and add to the database
+        # note password hash is saved for security purposes
         user = User(fname=fname, lname=lname,
-                    email=input_email, password=input_pw)
+                    email=input_email, password=hash(input_pw))
         db.session.add(user)
         db.session.commit()
 
@@ -200,7 +201,7 @@ def remove_trip():
         user_id = request.form.get("user")
 
         try:
-            trip = Trip.query.get(trip_id)
+            trip = Trip.get_trip(trip_id)
 
             # remove trip from the database for current user
             db.session.delete(trip)
@@ -230,15 +231,15 @@ def add_photo_to_trip():
     if session.get('login'):
 
         # if photo is not in the database, add it to the database
-        if not Photo.query.get(img_id):
+        if not Photo.get_photo(img_id):
             photo = Photo(img_id=int(img_id), url=url,
                           lon=float(lon), lat=float(lat), city_name=city_name)
             db.session.add(photo)
             db.session.commit()
 
         # check if photo already exists in current users trip
-        already_exists = TripPhotoRelationship.query.filter(
-            TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
+
+        already_exists = TripPhotoRelationship.get_trip_photo(trip_id, img_id)
 
         if already_exists:
             return ('This photo is already in your trip board!')
@@ -267,8 +268,7 @@ def remove_photo_from_trip():
 
     # checks if authorized user is accessing this page
     if session.get('login'):
-        already_exists = TripPhotoRelationship.query.filter(
-            TripPhotoRelationship.trip_id == trip_id, TripPhotoRelationship.photo_id == img_id).first()
+        already_exists = TripPhotoRelationship.get_trip_photo(trip_id, img_id)
 
         # photo is in current trip board, delete relationship from the database
         if already_exists:
@@ -332,13 +332,13 @@ def show_favorites():
         user_id = session.get('login')
 
         # gets user's favorite trip_ids from the database
-        liked_trips_ids = User.query.get(user_id).liked_trips
+        liked_trips_ids = User.get_user_by_id(user_id).liked_trips
 
         trips = []
 
         # look up trip ids and append trip objects to trips list
         for liked_trip in liked_trips_ids:
-            trip = Trip.query.get(liked_trip.trip_id)
+            trip = Trip.get_trip(liked_trip.trip_id)
             trips.append(trip)
 
         return render_template('favorites.html', trips=trips)
@@ -359,8 +359,8 @@ def add_to_favorites():
     if session.get('login'):
 
         # check if trip is already a favorite for user
-        already_exists = TripUserLikes.query.filter(
-            TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id).first()
+
+        already_exists = TripUserLikes.get_liked_trip(trip_id, user_id)
 
         if already_exists:
             flash('This trip is already in your favorites list!')
@@ -393,8 +393,7 @@ def remove_from_favorites():
     if session.get('login'):
 
         # check if trip is already a favorite for user
-        already_exists = TripUserLikes.query.filter(
-            TripUserLikes.trip_id == trip_id, TripUserLikes.user_id == user_id).first()
+        already_exists = TripUserLikes.get_liked_trip(trip_id, user_id)
 
         if already_exists:
 
@@ -417,7 +416,7 @@ def remove_from_favorites():
 def get_map():
 
     trip_id = request.form.get('trip-map')
-    trip = Trip.query.get(trip_id)
+    trip = Trip.get_trip(trip_id)
     photos = trip.photos
 
     lon = trip.city.lon
@@ -432,25 +431,6 @@ def get_map():
         trip_photos.append(photo_details)
 
     return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
-
-
-@app.route('/map.json')
-def map_info():
-
-    # trip = request.form.get('trip-map')
-    trip_id = request.form.get('trip-map')
-    trip = Trip.query.get(1)
-
-    photos = {
-        photo.img_id: {
-            'img_id': photo.img_id,
-            'url': photo.url,
-            'lat': photo.lat,
-            'lon': photo.lon
-        }
-        for photo in trip.photos}
-
-    return jsonify(photos)
 
 
 if __name__ == "__main__":

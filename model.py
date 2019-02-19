@@ -19,14 +19,14 @@ class User(db.Model):
 
     trips = db.relationship('Trip', backref='user')
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return '<User user_id={}  email={}>'.format(self.user_id, self.email)
 
     @classmethod
     def get_user_by_id(cls, user_id):
 
         # User.get_user_by_id(1)
-        return cls.query.filter_by(user_id=user_id).one()
+        return cls.query.filter_by(user_id=user_id).first()
 
     @classmethod
     def get_user_by_email(cls, email):
@@ -51,7 +51,7 @@ class Photo(db.Model):
     trips = db.relationship(
         'Trip', secondary='trip_photos_rel', backref='photos')
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return '<Image photo_id={} url={}>'.format(self.img_id, self.url)
 
     @classmethod
@@ -75,13 +75,13 @@ class Trip(db.Model):
 
     city = db.relationship('City')
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
 
         return '<Trip trip_id={} city={} user_id={}>'.format(self.trip_id, self.city_name, self.user_id)
 
     @classmethod
     def get_trip(cls, trip_id):
-        return cls.query.filter_by(trip_id=trip_id).one()
+        return cls.query.filter_by(trip_id=trip_id).first()
 
 
 class LikedTrip(db.Model):
@@ -109,7 +109,7 @@ class City(db.Model):
     trips = db.relationship('Trip')
     photos = db.relationship('Photo')
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         """Provide helpful representation when printed."""
 
         return '<City name={}>'.format(self.name)
@@ -117,7 +117,7 @@ class City(db.Model):
     @classmethod
     def get_city(cls, name):
 
-        return cls.query.filter_by(name=name).one()
+        return cls.query.filter_by(name=name).first()
 
 
 class TripPhotoRelationship(db.Model):
@@ -132,6 +132,10 @@ class TripPhotoRelationship(db.Model):
     photo_id = db.Column(db.BigInteger, db.ForeignKey(
         'photos.img_id'), nullable=False)
 
+    @classmethod
+    def get_trip_photo(cls, trip_id, photo_id):
+        return cls.query.filter_by(trip_id=trip_id, photo_id=photo_id).first()
+
 
 class TripUserLikes(db.Model):
     '''Tracks which users liked which boards'''
@@ -144,6 +148,10 @@ class TripUserLikes(db.Model):
         'trips.trip_id'), db.ForeignKey('liked_trips.trip_id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey(
         'users.user_id'), nullable=False)
+
+    @classmethod
+    def get_liked_trip(cls, trip_id, user_id):
+        return cls.query.filter_by(trip_id=trip_id, user_id=user_id).first()
 
 
 ##############################################################################

@@ -103,7 +103,7 @@ def get_photo_location(img_id):
     return location
 
 
-def search_photos_by_city(cityname, tags=''):
+def search_photos_by_city(cityname, tags=''):  # pragma: no cover
 
     city = cityname.strip()
     city = city.title()
