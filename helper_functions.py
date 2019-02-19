@@ -60,17 +60,10 @@ def cityname_is_valid(cityname):
 
 
 def get_trip_by_user_city(user_id, city_name):
+    '''given a user and cityname, return true if user has a board false otherwise'''
 
     trip = Trip.query.filter(Trip.user_id == user_id,
                              Trip.city_name == city_name).first()
-    return trip
-
-
-def user_has_trip(user_id, cityname):
-    '''given a user and cityname, return true if user has a board false otherwise'''
-
-    trip = Trip.query.filter(trip.user_id == user_id,
-                             trip.city_name == cityname).first()
     return trip
 
 
@@ -86,7 +79,7 @@ api_secret = os.environ.get('FLICKR_SECRET')
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
 
-def get_photo_location(img_id):
+def get_photo_location(img_id): # pragma: no cover
     '''get lat and lon information for photo'''
 
     location = {}

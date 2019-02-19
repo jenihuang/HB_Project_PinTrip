@@ -23,22 +23,37 @@ class TestLoginFunctions(unittest.TestCase):
 
 
 class TestDatabaseHelpers(unittest.TestCase):
+
+    def setUp(self):
+        self.client = app.test_client()
+        app.config['TESTING'] = True
+
+        connect_to_db(app, "postgresql:///testpintrip")
+
+    # def test_users_list(self):
+    #     result = self.client.get('/users')
+    #     self.assertIn(b'Jenica', result.data)
+
     def test_cityname_is_valid(self):
-        self.assertEqual(cityname_is_valid(
-            'san francisco'), True)
-        self.assertEqual(cityname_is_valid(
-            'San Francisco'), True)
-        self.assertEqual(cityname_is_valid(
-            ' San francisco '), True)
-        self.assertEqual(cityname_is_valid(
-            'hello'), False)
-        self.assertEqual(cityname_is_valid(
-            'SanFrancisco'), False)
+        result = cityname_is_valid('san francisco')
+        self.assertEqual('San Francisco', result.name)
 
-    # def test_get_trip_by_user_city(self):
+        result = cityname_is_valid('SanFrancisco')
+        self.assertEqual(None, result)
 
-    # def test_user_has_trip(self):
+        result = cityname_is_valid('hello')
+        self.assertEqual(None, result)
 
+    def test_get_trip_by_user_city(self):
+        result = get_trip_by_user_city(1, 'San Francisco')
+        self.assertEqual('San Francisco', result.city_name)
+
+        result = get_trip_by_user_city(1, 'Cancun')
+        self.assertEqual(None, result)
+
+
+
+################################################################################
 
 if __name__ == '__main__':
     unittest.main()
