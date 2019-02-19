@@ -6,7 +6,7 @@ import requests
 from helper_functions import *
 
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, request, flash, redirect, session, url_for
+from flask import Flask, render_template, request, flash, redirect, session, url_for, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelationship, TripUserLikes, LikedTrip
 
@@ -18,6 +18,8 @@ app.secret_key = "SECRETSECRETSECRET"
 
 # raises an error for undefined variables in jinja2
 app.jinja_env.undefined = StrictUndefined
+
+map_box_key = os.environ.get('MABOX_KEY')
 
 
 @app.route('/')
@@ -293,12 +295,17 @@ def process_results():
     user_id = session.get('login')
 
     # check if user input city is a valid city in the database
-    if cityname_is_valid(city_name):
-        city = cityname_is_valid(city_name)
-        photos = search_photos_by_city(city_name, tag)
+    city = cityname_is_valid(city_name)
+    if city:
+        photos = search_photos_by_city(city.name, tag)
         trip = get_trip_by_user_city(user_id, city.name)
 
-        return render_template('results.html', photos=photos, trip=trip)
+        if photos:
+            return render_template('results.html', photos=photos, trip=trip)
+
+        else:
+            flash('Sorry there was an error fetching your results from Flickr')
+            return redirect('/')
 
     # user input is not a valid city in the database, redirect to homepage
     else:
@@ -404,6 +411,49 @@ def remove_from_favorites():
     else:
         flash('You do not have permission to access this feature')
         return redirect('/')
+
+
+@app.route('/testmap')
+def test_map():
+
+    trip_id = request.form.get('trip-map')
+    trip = Trip.query.get(1)
+
+    photos = {
+        photo.img_id: {
+            'img_id': photo.img_id,
+            'url': photo.url,
+            'lat': photo.lat,
+            'lon': photo.lon
+        }
+        for photo in trip.photos}
+
+    return render_template('testmapbox.html', photos=photos, key=map_box_key)
+
+
+@app.route('/get_map')
+def get_map():
+
+    return render_template('map.html')
+
+
+@app.route('/map.json')
+def map_info():
+
+    # trip = request.form.get('trip-map')
+    trip_id = request.form.get('trip-map')
+    trip = Trip.query.get(1)
+
+    photos = {
+        photo.img_id: {
+            'img_id': photo.img_id,
+            'url': photo.url,
+            'lat': photo.lat,
+            'lon': photo.lon
+        }
+        for photo in trip.photos}
+
+    return jsonify(photos)
 
 
 if __name__ == "__main__":

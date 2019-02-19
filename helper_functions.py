@@ -94,6 +94,9 @@ def get_photo_location(img_id):
     data = flickr.photos.geo.getLocation(photo_id=img_id, format='json')
     results = json.loads(data)
 
+    if results.get('stat') == 'fail':
+        return False
+
     location['lat'] = float(results['photo']['location']['latitude'])
     location['lon'] = float(results['photo']['location']['longitude'])
 
@@ -112,15 +115,18 @@ def search_photos_by_city(cityname, tags=''):
     city_lat = city_object.lat
 
     '''calling flickr api function'''
-    photos = flickr.photos.search(tags=tags,
-                                  sort='interestingness-desc',
-                                  accuracy='9', has_geo='1', lat=city_lat, lon=city_lon,
-                                  per_page='20', format='json')
+    data = flickr.photos.search(tags=tags,
+                                sort='interestingness-desc',
+                                accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
+                                per_page='50', format='json')
 
     '''parse json data that was returned from the api call'''
-    data = json.loads(photos)
+    results = json.loads(data)
 
-    details = data['photos']['photo']
+    if results.get('stat') == 'fail':
+        return []
+
+    details = results['photos']['photo']
 
     '''creating empty list to store photos from api call'''
     photos = []
