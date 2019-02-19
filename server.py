@@ -413,11 +413,11 @@ def remove_from_favorites():
         return redirect('/')
 
 
-@app.route('/testmap')
-def test_map():
+@app.route('/get_map', methods=['POST'])
+def get_map():
 
     trip_id = request.form.get('trip-map')
-    trip = Trip.query.get(1)
+    trip = Trip.query.get(trip_id)
     photos = trip.photos
 
     lon = trip.city.lon
@@ -432,12 +432,6 @@ def test_map():
         trip_photos.append(photo_details)
 
     return render_template('testmapbox.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
-
-
-@app.route('/get_map')
-def get_map():
-
-    return render_template('map.html')
 
 
 @app.route('/map.json')
