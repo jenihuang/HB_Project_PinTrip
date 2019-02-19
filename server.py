@@ -19,7 +19,7 @@ app.secret_key = "SECRETSECRETSECRET"
 # raises an error for undefined variables in jinja2
 app.jinja_env.undefined = StrictUndefined
 
-map_box_key = os.environ.get('MABOX_KEY')
+# map_box_key = os.environ.get('MABOX_KEY')
 
 
 @app.route('/')
@@ -50,18 +50,10 @@ def process_login():
     input_email = request.form.get('email')
     input_pw = request.form.get('password')
 
-    # try to see if the user already exists in the database
-    try:
-        user = User.get_user_by_email(input_email)
-
-    # no user in the database, flash error and redirect back to login page
-    except:
-        flash('Sorry, that email does not exist!')
-        return redirect('/login')
+    user = User.get_user_by_email(input_email)
 
     # if the user is in the database from above step
     if user:
-
         # check if password is same as hashed form input
         if user.password == hash(input_pw):
             flash("Successfully logged in!")
@@ -75,6 +67,9 @@ def process_login():
         else:
             flash("Incorrect password!")
             return redirect('/login')
+    else:
+        flash('Sorry, that email does not exist!')
+        return redirect('/login')
 
 
 @app.route('/logout', methods=['GET'])
@@ -114,14 +109,13 @@ def process_signup():
         flash('Password must contain 1 of: Uppercase, lowercase, number')
         return redirect('/signup')
 
-    # check if user email already in the database
-    try:
-        user = User.get_user_by_email(input_email)
+    user = User.get_user_by_email(input_email)
+    if user:
         flash('Sorry that email is already registered')
         return redirect('/signup')
 
     # if email doesn't exist, register new user and add to the database
-    except:
+    else:
         # create new instance of user object and add to the database
         # note password hash is saved for security purposes
         user = User(fname=fname, lname=lname,
