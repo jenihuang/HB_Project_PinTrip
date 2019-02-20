@@ -32,6 +32,14 @@ class TestFlaskLogin(unittest.TestCase):
         self.assertIn(
             b'SIGN UP', result.data)
 
+    def test_show_signup(self):
+        ''' Test sign up page '''
+
+        result = self.client.get('/signup')
+
+        self.assertIn(
+            b'Sign up!', result.data)
+
     def test_process_signup(self):
         ''' Test signup of new user '''
 
@@ -48,6 +56,14 @@ class TestFlaskLogin(unittest.TestCase):
             follow_redirects=True)
 
         self.assertIn(b'Add a Trip!', result.data)
+
+    def test_show_login(self):
+        ''' Test sign up page '''
+
+        result = self.client.get('/login')
+
+        self.assertIn(
+            b'Please Sign In', result.data)
 
     def test_process_login(self):
         ''' Test login process '''
@@ -83,7 +99,7 @@ class TestFlaskLogin(unittest.TestCase):
             self.assertIn(b'SIGN UP', result.data)
 
     def test_userhome_page(self):
-        ''' Test that user homepage '''
+        ''' Test user homepage '''
 
         result = self.client.get("/1", follow_redirects=True)
         self.assertNotIn(b"Add a Trip!", result.data)
@@ -95,17 +111,33 @@ class TestFlaskLogin(unittest.TestCase):
             result = self.client.get('/1', follow_redirects=True)
             self.assertIn(b"Add a Trip!", result.data)
 
-    # def test_session_login(self):
-    #     ''' Test login form '''
+    def test_tripdetails_page(self):
+        ''' Test trip details page '''
 
-    #     with self.client as c:
-    #         result = c.post('/login',
-    #                         data={'email': 'taylor@gmail.com',
-    #                               'password': 'Abc123'},
-    #                         follow_redirects=True
-    #                         )
-    #         self.assertEqual(session['login'], 1)
-    #         self.assertIn(b"Add a Trip!", result.data)
+        ''' Tests non logged in user sees photos but does not see remove from trip'''
+        result = self.client.post(
+            '/view-trip', data={'trip': 1},
+            follow_redirects=True)
+
+        self.assertIn(b'Saved Photos', result.data)
+        self.assertNotIn(b'Remove from Trip', result.data)
+
+        ''' Tests logged in user sees remove photo option and does not see add trip to favorites option'''
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/view-trip', data={'trip': 1}, follow_redirects=True)
+            self.assertIn(b"Remove from Trip", result.data)
+            self.assertNotIn(b'Add to Favorites', result.data)
+
+        ''' Tests trip with no photos shows the correct page '''
+        result = self.client.post(
+            '/view-trip', data={'trip': 4},
+            follow_redirects=True)
+
+        self.assertIn(b'Sorry no photos', result.data)
+        self.assertNotIn(b'Saved Photos', result.data)
 
 
 if __name__ == '__main__':
