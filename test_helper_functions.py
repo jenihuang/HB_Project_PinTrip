@@ -132,44 +132,7 @@ class TestDatabaseHelpers(unittest.TestCase):
         self.assertEqual(None, result)
 
 
-class TestFlaskRoutes(unittest.TestCase):
-    ''' Flask route tests that use the database '''
-
-    def setUp(self):
-
-        self.client = app.test_client()
-        app.config['TESTING'] = True
-
-    def test_homepage(self):
-
-        result = self.client.get('/')
-
-        self.assertIn(
-            b'SIGN UP', result.data)
-
-    def test_login(self):
-
-        result = self.client.post(
-            '/login', data={'email': 'ellen@gmail.com', 'password': 'Abc123'}, follow_redirects=True)
-
-        self.assertIn(b'Add a Trip!', result.data)
-
-        result = self.client.post(
-            '/login', data={'email': 'blah@gmail.com', 'password': 'blahblah'}, follow_redirects=True)
-
-        self.assertIn(b'Please Sign In', result.data)
-
-        result = self.client.post(
-            '/login', data={'email': 'ellen@gmail.com', 'password': 'blahblah'}, follow_redirects=True)
-
-        self.assertIn(b'Please Sign In', result.data)
-
-    def test_logout(self):
-
-        result = self.client.get('/logout')
-        self.assertIn(b'SIGN UP', result.data)
-
-        ################################################################################
+################################################################################
 
 
 if __name__ == '__main__':

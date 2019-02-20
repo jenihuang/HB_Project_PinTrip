@@ -79,7 +79,7 @@ api_secret = os.environ.get('FLICKR_SECRET')
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
 
-def get_photo_location(img_id): # pragma: no cover
+def get_photo_location(img_id):  # pragma: no cover
     '''get lat and lon information for photo'''
 
     location = {}

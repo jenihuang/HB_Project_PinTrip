@@ -1,7 +1,7 @@
 # from pprint import pformat, pprint
 # import os
 # import flickrapi
-
+import hashlib
 import requests
 from helper_functions import *
 
@@ -12,6 +12,7 @@ from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelations
 
 
 app = Flask(__name__)
+# app.url_map.strict_slashes = False
 
 # key to use Flask session and debug toolbar
 app.secret_key = "SECRETSECRETSECRET"
@@ -55,7 +56,7 @@ def process_login():
     # if the user is in the database from above step
     if user:
         # check if password is same as hashed form input
-        if user.password == hash(input_pw):
+        if user.password == hashlib.md5(input_pw.encode()).hexdigest():
             flash("Successfully logged in!")
             user_id = user.user_id
 
@@ -118,8 +119,10 @@ def process_signup():
     else:
         # create new instance of user object and add to the database
         # note password hash is saved for security purposes
+        hashed_pw = hashlib.md5(input_pw.encode()).hexdigest()
+
         user = User(fname=fname, lname=lname,
-                    email=input_email, password=hash(input_pw))
+                    email=input_email, password=hashed_pw)
         db.session.add(user)
         db.session.commit()
 
