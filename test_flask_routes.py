@@ -28,15 +28,22 @@ class TestFlaskLogin(unittest.TestCase):
         ''' Test home page '''
 
         result = self.client.get('/')
-
         self.assertIn(
             b'SIGN UP', result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+
+            result = self.client.get('/', follow_redirects=True)
+
+            self.assertIn(b'Add a Trip!', result.data)
+            self.assertNotIn(b'SIGN UP', result.data)
 
     def test_show_signup(self):
         ''' Test sign up page '''
 
         result = self.client.get('/signup')
-
         self.assertIn(
             b'Sign up!', result.data)
 
@@ -44,24 +51,33 @@ class TestFlaskLogin(unittest.TestCase):
         ''' Test signup of new user '''
 
         result = self.client.post(
+            '/signup', data={'email': 'taylor@taylor', 'password': 'Abc123',
+                             'fname': 'taylor', 'lname': 'swift'},
+            follow_redirects=True)
+        self.assertIn(b'Sorry, not a valid email', result.data)
+
+        result = self.client.post(
+            '/signup', data={'email': 'taylor@taylor.com', 'password': '123456',
+                             'fname': 'taylor', 'lname': 'swift'},
+            follow_redirects=True)
+        self.assertIn(b'Password must contain', result.data)
+
+        result = self.client.post(
             '/signup', data={'email': 'taylor@gmail.com', 'password': 'Abc123',
                              'fname': 'taylor', 'lname': 'swift'},
             follow_redirects=True)
-
         self.assertIn(b'Sorry that email is already registered', result.data)
 
         result = self.client.post(
             '/signup', data={'email': 'blah@email.com', 'password': 'Abc123',
                              'fname': 'test', 'lname': 'test'},
             follow_redirects=True)
-
         self.assertIn(b'Add a Trip!', result.data)
 
     def test_show_login(self):
         ''' Test sign up page '''
 
         result = self.client.get('/login')
-
         self.assertIn(
             b'Please Sign In', result.data)
 
@@ -140,6 +156,8 @@ class TestFlaskLogin(unittest.TestCase):
         self.assertNotIn(b'Saved Photos', result.data)
 
 
-if __name__ == '__main__':
+################################################################################
+
+if __name__ == '__main__':  # pragma: no cover
     unittest.main()
     connect_to_db(app)

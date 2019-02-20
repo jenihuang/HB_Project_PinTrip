@@ -143,5 +143,4 @@ def search_photos_by_city(cityname, tags=''):  # pragma: no cover
 
 
 if __name__ == "__main__":
-
     connect_to_db(app)
