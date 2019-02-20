@@ -1,5 +1,4 @@
 from sqlalchemy import func
-import csv
 
 from model import User, Photo, City, Trip, TripPhotoRelationship, TripUserLikes, LikedTrip, connect_to_db, db
 from server import app
@@ -149,9 +148,7 @@ def load_liked_trips(likedtrips_filename):
     db.session.commit()
 
 
-if __name__ == "__main__":
-    connect_to_db(app)
-    db.create_all()
+def load_test_data():
 
     user_filename = "seed_data/users.txt"
     photo_filename = "seed_data/photos.txt"
@@ -167,3 +164,23 @@ if __name__ == "__main__":
     load_liked_trips(likedtrips_filename)
     load_trip_photos(tps_filename)
     load_user_likes(likes_filename)
+
+
+# if __name__ == "__main__":
+#     connect_to_db(app)
+#     db.create_all()
+
+#     user_filename = "seed_data/users.txt"
+#     photo_filename = "seed_data/photos.txt"
+#     city_filename = "seed_data/cities.txt"
+#     trip_filename = "seed_data/trips.txt"
+#     tps_filename = "seed_data/trip_photos.txt"
+#     likes_filename = "seed_data/userlikes.txt"
+#     likedtrips_filename = "seed_data/liked_trips.txt"
+#     load_users(user_filename)
+#     load_cities(city_filename)
+#     load_photos(photo_filename)
+#     load_trips(trip_filename)
+#     load_liked_trips(likedtrips_filename)
+#     load_trip_photos(tps_filename)
+#     load_user_likes(likes_filename)

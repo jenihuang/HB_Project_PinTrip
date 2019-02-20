@@ -418,6 +418,7 @@ def get_map():
 
     lon = trip.city.lon
     lat = trip.city.lat
+
     city_geo = {"lon": lon, "lat": lat}
 
     trip_photos = []

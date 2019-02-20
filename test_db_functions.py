@@ -5,10 +5,29 @@ from sqlalchemy import create_engine, text
 from server import app
 from model import *
 from helper_functions import *
+from seed import *
 
 
 class TestLoginFunctions(unittest.TestCase):
     ''' Registration validation tests '''
+
+    def setUp(self):
+        ''' Connect to flask test client and test database '''
+
+        self.client = app.test_client()
+        app.config['TESTING'] = True
+
+        connect_to_db(app, "postgresql:///testpintrip")
+        db.create_all()
+        load_test_data()
+
+        # db.engine.execute(open('test.sql', 'r').read())
+
+    def tearDown(self):
+
+        db.session.remove()
+        db.drop_all()
+        db.engine.dispose()
 
     def test_email_isvalid(self):
         ''' Tests if user input email is a valid email address '''
@@ -38,14 +57,16 @@ class TestDatabaseHelpers(unittest.TestCase):
         app.config['TESTING'] = True
 
         connect_to_db(app, "postgresql:///testpintrip")
+        db.create_all()
+        load_test_data()
 
         # db.engine.execute(open('test.sql', 'r').read())
 
-    # def tearDown(self):
+    def tearDown(self):
 
-    #     db.session.remove()
-    #     db.drop_all()
-    #     db.engine.dispose()
+        db.session.remove()
+        db.drop_all()
+        db.engine.dispose()
 
     def test_cityname_is_valid(self):
         ''' Test if user input city returns a valid city from the database '''
@@ -90,9 +111,9 @@ class TestDatabaseHelpers(unittest.TestCase):
         ''' Test obtaining photo from the database by id '''
 
         result = Photo.get_photo(43472061031)
-        self.assertEqual('Napa', result.city.name)
+        self.assertEqual('Tokyo', result.city.name)
 
-        result = Photo.get_photo(1)
+        result = Photo.get_photo(25)
         self.assertEqual(None, result)
 
     def test_get_trip(self):
@@ -101,7 +122,7 @@ class TestDatabaseHelpers(unittest.TestCase):
         result = Trip.get_trip(1)
         self.assertEqual('taySF', result.name)
 
-        result = Trip.get_trip(2)
+        result = Trip.get_trip(5)
         self.assertEqual(None, result)
 
     def test_get_city(self):
@@ -116,10 +137,10 @@ class TestDatabaseHelpers(unittest.TestCase):
     def test_get_trip_photo(self):
         ''' Test obtaining photo in trip relationship from the database '''
 
-        result = TripPhotoRelationship.get_trip_photo(1, 46629768792)
-        self.assertEqual(42, result.relationship_id)
+        result = TripPhotoRelationship.get_trip_photo(1, 45678)
+        self.assertEqual(2, result.relationship_id)
 
-        result = TripPhotoRelationship.get_trip_photo(1, 1)
+        result = TripPhotoRelationship.get_trip_photo(1, 38569834)
         self.assertEqual(None, result)
 
     def test_get_liked_trip(self):
