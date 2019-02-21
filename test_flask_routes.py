@@ -134,7 +134,6 @@ class TestFlaskLogin(unittest.TestCase):
         result = self.client.post(
             '/view-trip', data={'trip': 1},
             follow_redirects=True)
-
         self.assertIn(b'Saved Photos', result.data)
         self.assertNotIn(b'Remove from Trip', result.data)
 
@@ -155,8 +154,61 @@ class TestFlaskLogin(unittest.TestCase):
         self.assertIn(b'Sorry no photos', result.data)
         self.assertNotIn(b'Saved Photos', result.data)
 
+    def test_add_trip(self):
+        ''' Tests adding a trip to user page '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/1/add-trip', data={'name': 'Test Napa Trip', 'city': 'Napa'},
+                follow_redirects=True)
+
+            self.assertIn(b"Test Napa Trip", result.data)
+            self.assertNotIn(b'Add to Favorites', result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/1/add-trip', data={'name': 'Test Hello', 'city': 'hello'},
+                follow_redirects=True)
+
+            self.assertIn(b"Sorry, that city is not available", result.data)
+            self.assertNotIn(b'Test Hello', result.data)
+
+    def test_remove_trip(self):
+        ''' Tests removing a trip from user page '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 5
+            result = self.client.post(
+                '/remove-trip', data={'trip': 4, 'user': 5},
+                follow_redirects=True)
+
+            self.assertIn(b"Add a Trip!", result.data)
+            self.assertNotIn(b'Napa', result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 5
+            result = self.client.post(
+                '/remove-trip', data={'trip': 1, 'user': 5},
+                follow_redirects=True)
+
+            self.assertIn(
+                b"Sorry, that trip is not in your trips.", result.data)
+
+        # result = self.client.post(
+        #     '/remove-trip', data={'trip': 4, 'user': 5},
+        #     follow_redirects=True)
+        # self.assertIn(b'You do not have permission', result.data)
+        # self.assertNotIn(b'SIGN UP', result.data)
+
 
 ################################################################################
+
 
 if __name__ == '__main__':  # pragma: no cover
     unittest.main()

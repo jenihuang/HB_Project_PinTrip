@@ -197,13 +197,23 @@ def remove_trip():
         trip_id = request.form.get("trip")
         user_id = request.form.get("user")
 
-        try:
-            trip = Trip.get_trip(trip_id)
+        trip = Trip.get_trip(trip_id)
 
-            # remove trip from the database for current user
+        if trip.user_id == session.get('login'):
+            liked = LikedTrip.query.get(trip_id)
+            liked_trips = TripUserLikes.query.filter(
+                TripUserLikes.trip_id == trip_id).all()
+
+            if liked_trips:
+                # remove trip from the database for current user
+                for liked_trip in liked_trips:
+                    db.session.delete(liked_trip)
+                    db.session.commit()
+
+                db.session.delete(liked)
             db.session.delete(trip)
             db.session.commit()
-        except:
+        else:
             flash('Sorry, that trip is not in your trips.')
 
         return redirect(url_for('userhome', user_id=user_id))
