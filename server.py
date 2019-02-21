@@ -192,34 +192,34 @@ def add_trip(user_id):
 def remove_trip():
     '''removes trip board from user boards'''
 
-    if session.get('login'):
+    trip_id = request.form.get("trip")
+    user_id = request.form.get("user")
 
-        trip_id = request.form.get("trip")
-        user_id = request.form.get("user")
+    trip = Trip.get_trip(trip_id)
 
-        trip = Trip.get_trip(trip_id)
+    if trip:
+        if session.get('login') == trip.user_id:
 
-        if trip.user_id == session.get('login'):
             liked = LikedTrip.query.get(trip_id)
             liked_trips = TripUserLikes.query.filter(
                 TripUserLikes.trip_id == trip_id).all()
 
             if liked_trips:
-                # remove trip from the database for current user
+                # remove all liked trip relationships from the database
                 for liked_trip in liked_trips:
                     db.session.delete(liked_trip)
                     db.session.commit()
 
-                db.session.delete(liked)
+            db.session.delete(liked)
             db.session.delete(trip)
             db.session.commit()
+
+            return redirect(url_for('userhome', user_id=user_id))
         else:
-            flash('Sorry, that trip is not in your trips.')
-
-        return redirect(url_for('userhome', user_id=user_id))
-
+            flash('You do not have permission to access this feature')
+            return redirect('/')
     else:
-        flash('You do not have permission to access this feature')
+        flash('Sorry, that is not a valid trip')
         return redirect('/')
 
 
@@ -234,8 +234,10 @@ def add_photo_to_trip():
     lon = request.form.get('lon')
     city_name = request.form.get('city_name')
 
+    trip = Trip.get_trip(trip_id)
+
     # checks if authorized user is accessing this page
-    if session.get('login'):
+    if session.get('login') == trip.user_id:
 
         # if photo is not in the database, add it to the database
         if not Photo.get_photo(img_id):
@@ -249,7 +251,7 @@ def add_photo_to_trip():
         already_exists = TripPhotoRelationship.get_trip_photo(trip_id, img_id)
 
         if already_exists:
-            return ('This photo is already in your trip board!')
+            return 'This photo is already in your trip board!'
 
         # photo is not in current trip board, add relationship to the database
         else:
@@ -257,7 +259,6 @@ def add_photo_to_trip():
                 trip_id=trip_id, photo_id=img_id)
             db.session.add(trip_photo)
             db.session.commit()
-
             return 'Photo Added'
 
     # unauthorized user, redirect to homepage
@@ -273,8 +274,10 @@ def remove_photo_from_trip():
     trip_id = request.form.get("trip")
     img_id = request.form.get("photo")
 
+    trip = Trip.get_trip(trip_id)
+
     # checks if authorized user is accessing this page
-    if session.get('login'):
+    if session.get('login') == trip.user_id:
         already_exists = TripPhotoRelationship.get_trip_photo(trip_id, img_id)
 
         # photo is in current trip board, delete relationship from the database
@@ -303,6 +306,7 @@ def process_results():
 
     # check if user input city is a valid city in the database
     city = cityname_is_valid(city_name)
+
     if city:
         photos = search_photos_by_city(city.name, tag)
         trip = get_trip_by_user_city(user_id, city.name)
@@ -363,10 +367,9 @@ def add_to_favorites():
     trip_id = request.form.get('trip')
 
     # check if user adding is same as logged in user
-    if session.get('login'):
+    if user_id:
 
         # check if trip is already a favorite for user
-
         already_exists = TripUserLikes.get_liked_trip(trip_id, user_id)
 
         if already_exists:
@@ -397,7 +400,7 @@ def remove_from_favorites():
     user_id = session.get('login')
     trip_id = request.form.get('trip')
 
-    if session.get('login'):
+    if user_id:
 
         # check if trip is already a favorite for user
         already_exists = TripUserLikes.get_liked_trip(trip_id, user_id)
@@ -419,29 +422,34 @@ def remove_from_favorites():
         return redirect('/')
 
 
-@app.route('/get_map', methods=['POST'])
+@app.route('/get-map', methods=['POST'])
 def get_map():
 
     trip_id = request.form.get('trip-map')
     trip = Trip.get_trip(trip_id)
-    photos = trip.photos
 
-    lon = trip.city.lon
-    lat = trip.city.lat
+    if trip:
+        photos = trip.photos
 
-    city_geo = {"lon": lon, "lat": lat}
+        lon = trip.city.lon
+        lat = trip.city.lat
 
-    trip_photos = []
+        city_geo = {"lon": lon, "lat": lat}
 
-    for photo in photos:
-        photo_details = {'img_id': photo.img_id,
-                         'url': photo.url, 'lat': photo.lat, 'lon': photo.lon}
-        trip_photos.append(photo_details)
+        trip_photos = []
 
-    return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
+        for photo in photos:
+            photo_details = {'img_id': photo.img_id,
+                             'url': photo.url, 'lat': photo.lat, 'lon': photo.lon}
+            trip_photos.append(photo_details)
+
+        return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
+    else:
+        flash('Sorry could not find this trip!')
+        return redirect('/')
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     app.debug = True
     connect_to_db(app)
     app.run(host="0.0.0.0")

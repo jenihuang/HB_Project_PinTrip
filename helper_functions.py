@@ -79,7 +79,7 @@ api_secret = os.environ.get('FLICKR_SECRET')
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
 
-def get_photo_location(img_id):  # pragma: no cover
+def get_photo_location(img_id):
     '''get lat and lon information for photo'''
 
     location = {}
@@ -96,7 +96,7 @@ def get_photo_location(img_id):  # pragma: no cover
     return location
 
 
-def search_photos_by_city(cityname, tags=''):  # pragma: no cover
+def search_photos_by_city(cityname, tags=''):
 
     city = cityname.strip()
     city = city.title()
@@ -142,5 +142,5 @@ def search_photos_by_city(cityname, tags=''):  # pragma: no cover
     return photos
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     connect_to_db(app)

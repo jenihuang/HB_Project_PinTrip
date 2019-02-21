@@ -169,6 +169,6 @@ def connect_to_db(app, db_uri='postgresql:///pintrip'):
     db.init_app(app)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     connect_to_db(app)
     from server import app

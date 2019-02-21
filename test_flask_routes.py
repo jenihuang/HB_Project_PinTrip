@@ -184,27 +184,205 @@ class TestFlaskLogin(unittest.TestCase):
             with c.session_transaction() as sess:
                 sess['login'] = 5
             result = self.client.post(
-                '/remove-trip', data={'trip': 4, 'user': 5},
+                '/remove-trip', data={'trip': 3, 'user': 5},
                 follow_redirects=True)
-
-            self.assertIn(b"Add a Trip!", result.data)
-            self.assertNotIn(b'Napa', result.data)
+            self.assertNotIn(b'Ellen SF', result.data)
 
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['login'] = 5
             result = self.client.post(
-                '/remove-trip', data={'trip': 1, 'user': 5},
+                '/remove-trip', data={'trip': 7, 'user': 5},
+                follow_redirects=True)
+            self.assertNotIn(
+                b"Sorry that is not a valid trip", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 5
+            result = self.client.post(
+                '/remove-trip', data={'trip': 1, 'user': 2},
+                follow_redirects=True)
+            self.assertIn(b'You do not have permission', result.data)
+            self.assertNotIn(b'SIGN UP', result.data)
+
+    def test_add_photo(self):
+        ''' Tests adding a photo to trip '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                'add-photo', data={'trip': 1, 'img_id': 5000,
+                                   'url': 'test.com', 'lat': 5.0, 'lon': 5.0,
+                                   'city_name': 'Cancun'},
                 follow_redirects=True)
 
-            self.assertIn(
-                b"Sorry, that trip is not in your trips.", result.data)
+            self.assertIn(b"Photo Added", result.data)
 
-        # result = self.client.post(
-        #     '/remove-trip', data={'trip': 4, 'user': 5},
-        #     follow_redirects=True)
-        # self.assertIn(b'You do not have permission', result.data)
-        # self.assertNotIn(b'SIGN UP', result.data)
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                'add-photo', data={'trip': 1, 'img_id': 1,
+                                   'url': 'test.com', 'lat': 5.0, 'lon': 5.0,
+                                   'city_name': 'San Francisco'},
+                follow_redirects=True)
+
+            self.assertIn(b"This photo is already in your trip", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 5
+            result = self.client.post(
+                'add-photo', data={'trip': 1, 'img_id': 1,
+                                   'url': 'test.com', 'lat': 5.0, 'lon': 5.0,
+                                   'city_name': 'San Francisco'},
+                follow_redirects=True)
+
+            self.assertIn(b"Unauthorized User", result.data)
+
+    def test_remove_photo(self):
+        ''' Tests removing a photo from trip '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/remove-photo', data={'trip': 1, 'photo': 1},
+                follow_redirects=True)
+            self.assertIn(
+                b"Successfully removed", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/remove-photo', data={'trip': 1, 'photo': 54321},
+                follow_redirects=True)
+            self.assertIn(
+                b"This photo is not in your trip", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 5
+            result = self.client.post(
+                '/remove-photo', data={'trip': 1, 'photo': 1},
+                follow_redirects=True)
+            self.assertIn(b'Error: Photo not removed', result.data)
+
+    def test_process_results(self):
+        ''' Tests getting search results '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/results', data={'city': 'blah', 'tag': 'winery'},
+                follow_redirects=True)
+            self.assertIn(
+                b"Sorry, that city is not in our database.", result.data)
+
+    def test_explore_trips(self):
+        ''' Test explore page '''
+
+        result = self.client.get('/explore')
+        self.assertIn(
+            b'Explore Trips', result.data)
+
+    def test_show_favorites(self):
+        ''' Test favorites page '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.get('/favorites')
+            self.assertIn(
+                b'Favorite Trips', result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = None
+            result = self.client.get('/favorites')
+            self.assertNotIn(
+                b'Favorite Trips', result.data)
+
+    def test_add_favorite(self):
+        ''' Tests adding a trip to favorites page '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/add-fav', data={'trip': 4},
+                follow_redirects=True)
+            self.assertIn(b"Ellen Napa", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/add-fav', data={'trip': 3},
+                follow_redirects=True)
+            self.assertIn(
+                b"This trip is already in your favorites", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = None
+            result = self.client.post(
+                '/add-fav', data={'trip': 3},
+                follow_redirects=True)
+            self.assertIn(
+                b"You do not have permission", result.data)
+
+    def test_remove_favorite(self):
+        ''' Tests removing a trip from favorites page '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/remove-fav', data={'trip': 3},
+                follow_redirects=True)
+            self.assertNotIn(b"Ellen SF", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/remove-fav', data={'trip': 4},
+                follow_redirects=True)
+            self.assertIn(
+                b"This trip is not in your favorites", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = None
+            result = self.client.post(
+                '/remove-fav', data={'trip': 3},
+                follow_redirects=True)
+            self.assertIn(
+                b"You do not have permission", result.data)
+
+    def test_get_map(self):
+        ''' Tests getting trip map page '''
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/get-map', data={'trip-map': 1},
+                follow_redirects=True)
+            self.assertIn(b"Map Trip", result.data)
+
+        with self.client as c:
+            with c.session_transaction() as sess:
+                sess['login'] = 1
+            result = self.client.post(
+                '/get-map', data={'trip-map': 7},
+                follow_redirects=True)
+            self.assertNotIn(b"Map Trip", result.data)
 
 
 ################################################################################
