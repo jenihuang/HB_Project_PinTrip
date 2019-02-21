@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{% block title %}TITLE HERE{% endblock %}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <link href="../static/css/style.css" rel="stylesheet">
+
+
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.js"></script>
+
+
+</head>
+<body>
+<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+<!--       <i class="fas fa-heart"></i>
+      <i class="far fa-heart"></i> -->
+      <a class="navbar-brand logo" href="/">
+      <i class="fas fa-camera-retro"></i> PinTrip</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+      </button>
+      <form action='/results' method='POST' class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" name='city' placeholder="City" aria-label="City">
+        <input class="form-control mr-sm-2" type="search" name='tag' placeholder="Tag" aria-label="Tag">
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Show Me Photos!</button>
+      </form>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        {% if session.get('login') %}
+        <li class="nav-item">
+          <a class="nav-link" href="/{{session.get('login')}}">My Trips</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/favorites">Favorites</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="/explore">Explore</a>
+        </li>
+        {% if session.get('login') %}
+        <li class="nav-item">
+          <a class="nav-link disabled" href="/logout">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link disabled" href="/login">Login</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    </div>
+  </nav>
+
+<div id="extending">
+  {% for flash in get_flashed_messages() %}
+    <div class="alert alert-danger" style="width:90%; margin:0 auto;">{{ flash }}</div>
+  {% endfor %}
+{% block content %}
+{% endblock %}
+</div>
+
+
+</body>
+</html>
+
+

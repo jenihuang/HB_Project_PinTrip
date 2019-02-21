@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Details for {{ trip.name }}{% endblock %}
+
+{% block content %}
+
+
+{% if photos %}
+  <h3>{{ trip.city_name }} Saved Photos</h3>
+        {% if session.get('login') != trip.user_id %}
+      <form action="/add-fav" method="POST">
+        <input type="hidden" name="trip" value={{ trip.trip_id }}>
+        <input type="hidden" name="user" value={{ session.get('login') }}>
+        <input type="submit" class="btn btn-link" value="Add to Favorites">
+      </form>
+        {% endif %}
+
+      <form action="/get_map" method="POST">
+        <input type="hidden" name="trip-map" value={{ trip.trip_id }}>
+        <input type="submit" class="btn btn-link" value="Get Map">
+  <section id="results">
+    {% for photo in photos %}
+    <br>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 img-results">
+        <img src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
+      {% if session.get('login') == trip.user_id %}
+      <form 
+          data-trip="{{ trip.trip_id }}"
+          data-photo="{{ photo.img_id }}"
+          action="/remove-photo" 
+          class="remove-photo-form" 
+          method="POST">
+        <input type="submit" class="btn btn-link" value="Remove from Trip">
+      </form>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+{% else %}
+  <h3> Sorry no photos have been added yet for this trip.</h3>
+{% endif %}
+
+<script>
+
+"use strict";
+
+function handleRemoveSubmit() {
+  $('form.remove-photo-form').on('submit', (evt) => {
+    evt.preventDefault();
+
+    const formInputs = {
+      'trip': $(evt.target).data( "trip" ),
+      'photo': $(evt.target).data( "photo" )
+    };
+
+    $.post('/remove-photo', formInputs, (results) => {
+      alert(results);
+      $(".submitBtn").attr("disabled", true);
+    });
+  });
+}
+
+handleRemoveSubmit();
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Explore Trips {% endblock %}
+
+{% block content %}
+
+{% if trips %}
+  <section id="results">
+    {% for trip in trips %}
+    <h3>{{ trip.name }}</h3>
+          {% if trip.photos %}
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 img-results">
+              <img src="{{ trip.photos[0].url }}" class="img-responsive"></div>
+          {% else %}
+              <h4> Sorry this trip does not have any photos</h4>
+          {% endif %}
+<!--     <a href="/{{ trip.user_id }}/{{ trip.trip_id }}" class="thumbnail">View Details</a> -->
+    <form action="/view-trip" method="POST">
+        <input type="hidden" name="user" value={{ trip.user_id }}>
+        <input type="hidden" name="trip" value={{ trip.trip_id }}>
+        <input type="submit" class="btn btn-link" value="View Details">
+    </form>
+    {% endfor %}
+  </section>
+{% else %}
+  <h3> Whoops! There are currently no trips in our database. </h3>
+{% endif %}
+
+{% endblock %}

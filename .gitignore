@@ -1,12 +1,8 @@
 __pycache__
 *.pyc
 *.sh
-env
 .DS_Store
-*.html
-*.css
-test.py
-*.txt
+env
+htmlcov
 untracked
 *.md
-testmapbox.html

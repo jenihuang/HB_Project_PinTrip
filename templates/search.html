@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+
+    <div class="col-xs-12">
+
+      <h2>Discover Places</h2>
+      
+      <form method="POST" action="/results">
+
+        <div class="form-group">
+          <label for="search-term">Tag</label>
+          <input id="search-term" class="form-control" type="text" name="tag">
+        </div>
+
+        <div class="form-group">
+          <label for="event-loc">City</label>
+          <input id="event-loc" class="form-control" type="text" name="city" required>
+        </div>
+
+        <input type="submit" value="Show me photos!" class="btn btn-primary">
+
+      </form>
+
+    </div>
+
+  </div>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %} My Trips {% endblock %}
+
+{% block content %}
+<h1>Add a Trip!</h1>
+<a data-toggle="modal" href="#myModal" class="btn btn-primary">Create Board</a>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add City Board</h4>
+        </div>
+        <div class="modal-body">
+          <form class="modal-content animate" action="/{{ user.user_id }}/add-trip" method="POST">
+            <input type="text" placeholder="Enter City" name="city">
+            <input type="text" placeholder="Name of Trip" name="name">
+        </div>
+        <div class="modal-footer">
+          <a href="#" data-dismiss="modal" class="btn">Close</a>
+          <button class="btn btn-primary" type="submit">Add Trip</a>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+<br><br><br>
+
+{% if trips %}
+  <section id="results">
+    {% for trip in trips %}
+    <h3>{{ trip.name }}</h3>
+          {% if trip.photos %}
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 img-results">
+              <img src="{{ trip.photos[0].url }}" class="img-responsive"></div>
+          {% else %}
+              <h4> Sorry this trip does not have any photos</h4>
+          {% endif %}
+      <form action="/view-trip" method="POST">
+        <input type="hidden" name="trip" value={{ trip.trip_id }}>
+        <input type="submit" class="btn btn-link" value="View Details">
+      </form>
+      <form action="/remove-trip" method="POST">
+        <input type="hidden" name="user" value={{ session.get('login') }}>
+        <input type="hidden" name="trip" value={{ trip.trip_id }}>
+        <input type="submit" class="btn btn-link" value="Remove Trip">
+      </form>
+      <br><br>
+    {% endfor %}
+  </section>
+{% else %}
+  <h3> Sorry no you do not have any trips yet.</h3>
+{% endif %}
+
+<script>
+
+  let modal = document.getElementById('modal-wrapper');
+  window.onclick = function(event){
+    if (event.target == modal) {
+      modal.style.display='none';
+    }
+  }
+</script>
+
+{% endblock %}

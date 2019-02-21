@@ -1,0 +1,4 @@
+taySF|1|San Francisco
+Ellen Tokyo|5|Tokyo
+Ellen SF|5|San Francisco
+Ellen Napa|5|Napa

@@ -1,0 +1,167 @@
+Dubai|25.0657|55.17128|AE|1137347|Asia/Dubai
+Abu Dhabi|24.46667|54.36667|AE|603492|Asia/Dubai
+Buenos Aires|-34.61315|-58.37723|AR|13076300|America/Argentina/Buenos_Aires
+Vienna|48.20849|16.37208|AT|1691468|Europe/Vienna
+Perth|-31.95224|115.8614|AU|1896548|Australia/Perth
+Adelaide|-34.92866|138.59863|AU|1225235|Australia/Adelaide
+Sydney|-33.86785|151.20732|AU|4627345|Australia/Sydney
+Melbourne|-37.814|144.96332|AU|4246375|Australia/Melbourne
+Gold Coast|-28.00029|153.43088|AU|591473|Australia/Brisbane
+Brisbane|-27.46794|153.02809|AU|2189878|Australia/Brisbane
+Dhaka|23.7104|90.40744|BD|10356500|Asia/Dhaka
+Brussels|50.85045|4.34878|BE|1019022|Europe/Brussels
+Sao Paulo|-23.5475|-46.63611|BR|10021295|America/Sao_Paulo
+Salvador|-12.97111|-38.51083|BR|2711840|America/Bahia
+Rio de Janeiro|-22.90278|-43.2075|BR|6023699|America/Sao_Paulo
+Calgary|51.05011|-114.08529|CA|1019942|America/Edmonton
+Edmonton|53.55014|-113.46871|CA|712391|America/Edmonton
+Montreal|45.50884|-73.58781|CA|1600000|America/Toronto
+Ottawa|45.41117|-75.69812|CA|812129|America/Toronto
+Toronto|43.70011|-79.4163|CA|2600000|America/Toronto
+Vancouver|49.24966|-123.11934|CA|600000|America/Vancouver
+Winnipeg|49.8844|-97.14704|CA|632063|America/Winnipeg
+Quebec|46.81228|-71.21454|CA|528595|America/Toronto
+Xi'an|34.25833|108.92861|CN|6501190|Asia/Shanghai
+Wuhan|30.58333|114.26667|CN|9785388|Asia/Shanghai
+Tianjin|39.14222|117.17667|CN|11090314|Asia/Shanghai
+Tangshan|39.63333|118.18333|CN|3372102|Asia/Shanghai
+Shenzhen|22.54554|114.0683|CN|10358381|Asia/Shanghai
+Shanghai|31.22222|121.45806|CN|22315474|Asia/Shanghai
+Qingdao|36.06488|120.38042|CN|3718835|Asia/Shanghai
+Nanjing|32.06167|118.77778|CN|7165292|Asia/Shanghai
+Guilin|25.28194|110.28639|CN|649352|Asia/Shanghai
+Guangzhou|23.11667|113.25|CN|11071424|Asia/Shanghai
+Lijiang|26.86879|100.22072|CN|1137600|Asia/Shanghai
+Dalian|38.91222|121.60222|CN|4087733|Asia/Shanghai
+Chongqing|29.56278|106.55278|CN|7457600|Asia/Shanghai
+Chengdu|30.66667|104.06667|CN|7415590|Asia/Shanghai
+Beijing|39.9075|116.39723|CN|11716620|Asia/Shanghai
+Havana|23.13302|-82.38304|CU|2163824|America/Havana
+Prague|50.08804|14.42076|CZ|1165581|Europe/Prague
+Munich|48.13743|11.57549|DE|1260391|Europe/Berlin
+Berlin|52.52437|13.41053|DE|3426354|Europe/Berlin
+Copenhagen|55.67594|12.56553|DK|1153615|Europe/Copenhagen
+Cairo|30.06263|31.24967|EG|7734614|Africa/Cairo
+Giza|30.00808|31.21093|EG|2443203|Africa/Cairo
+Alexandria|31.21564|29.95527|EG|3811516|Africa/Cairo
+Madrid|40.4165|-3.70256|ES|3255944|Europe/Madrid
+Barcelona|41.38879|2.15899|ES|1621537|Europe/Madrid
+Paris|48.85341|2.3488|FR|2138551|Europe/Paris
+Wellington|52.7|-2.51667|GB|22816|Europe/London
+Nottingham|52.9536|-1.15047|GB|729977|Europe/London
+London|51.50853|-0.12574|GB|7556900|Europe/London
+Liverpool|53.41058|-2.97794|GB|864122|Europe/London
+Leicester|52.6386|-1.13169|GB|508916|Europe/London
+Bristol|51.45523|-2.59665|GB|617280|Europe/London
+Birmingham|52.48142|-1.89983|GB|984333|Europe/London
+Athens|37.97945|23.71622|GR|664046|Europe/Athens
+Guatemala City|14.64072|-90.51327|GT|994938|America/Guatemala
+Hong Kong|22.27832|114.17469|HK|7012738|Asia/Hong_Kong
+Port-au-Prince|18.53917|-72.335|HT|1234742|America/Port-au-Prince
+Budapest|47.49801|19.03991|HU|1741041|Europe/Budapest
+Padang|-0.94924|100.35427|ID|840352|Asia/Jakarta
+Malang|-7.9797|112.6304|ID|746716|Asia/Jakarta
+Jakarta|-6.21462|106.84513|ID|8540121|Asia/Jakarta
+Denpasar|-8.65|115.21667|ID|834881|Asia/Makassar
+Dublin|53.33306|-6.24889|IE|1024027|Europe/Dublin
+Jerusalem|31.76904|35.21633|IL|801000|Asia/Jerusalem
+Chennai|13.08784|80.27847|IN|4328063|Asia/Kolkata
+Jaipur|26.91962|75.78781|IN|2711758|Asia/Kolkata
+Delhi|28.65195|77.23149|IN|10927986|Asia/Kolkata
+Mumbai|19.07283|72.88261|IN|12691836|Asia/Kolkata
+Baghdad|33.34058|44.40088|IQ|7216000|Asia/Baghdad
+Rome|41.89193|12.51133|IT|2318895|Europe/Rome
+Naples|40.85216|14.26811|IT|959470|Europe/Rome
+Milan|45.46427|9.18951|IT|1236837|Europe/Rome
+Genoa|44.40478|8.94439|IT|580223|Europe/Rome
+Kingston|17.99702|-76.79358|JM|937700|America/Jamaica
+Yokohama|35.43333|139.65|JP|3574443|Asia/Tokyo
+Tokyo|35.6895|139.69171|JP|8336599|Asia/Tokyo
+Osaka|34.69374|135.50218|JP|2592413|Asia/Tokyo
+Kyoto|35.02107|135.75385|JP|1459640|Asia/Tokyo
+Kobe|34.6913|135.183|JP|1528478|Asia/Tokyo
+Kawasaki|35.52056|139.71722|JP|1306785|Asia/Tokyo
+Hiroshima|34.4|132.45|JP|1143841|Asia/Tokyo
+Chiba|35.6|140.11667|JP|919729|Asia/Tokyo
+Sapporo|43.06667|141.35|JP|1883027|Asia/Tokyo
+Pyongyang|39.03385|125.75432|KP|3222000|Asia/Pyongyang
+Seoul|37.566|126.9784|KR|10349312|Asia/Seoul
+Busan|35.10278|129.04028|KR|3678555|Asia/Seoul
+Incheon|37.45646|126.70515|KR|2628000|Asia/Seoul
+Jeonju|35.82194|127.14889|KR|711424|Asia/Seoul
+Colombo|6.93194|79.84778|LK|648034|Asia/Colombo
+Casablanca|33.58831|-7.61138|MA|3144909|Africa/Casablanca
+Mandalay|21.97473|96.08359|MM|1208099|Asia/Yangon
+Macau|22.20056|113.54611|MO|520400|Asia/Macau
+Cozumel|20.50038|-86.94272|MX|73934|America/Cancun
+Mexico City|19.42847|-99.12766|MX|12294193|America/Mexico_City
+Cancun|21.17429|-86.84656|MX|542043|America/Cancun
+Tijuana|32.5027|-117.00371|MX|1376457|America/Tijuana
+Lagos|6.45407|3.39467|NG|9000000|Africa/Lagos
+Amsterdam|52.37403|4.88969|NL|741636|Europe/Amsterdam
+Oslo|59.91273|10.74609|NO|580000|Europe/Oslo
+Kathmandu|27.70169|85.3206|NP|1442271|Asia/Kathmandu
+Muscat|23.58413|58.40778|OM|797000|Asia/Muscat
+Lima|-12.04318|-77.02824|PE|7737002|America/Lima
+Manila|14.6042|120.9822|PH|1600000|Asia/Manila
+Karachi|24.8608|67.0104|PK|11624219|Asia/Karachi
+Islamabad|33.72148|73.04329|PK|601600|Asia/Karachi
+Hyderabad|25.39242|68.37366|PK|1386330|Asia/Karachi
+Warsaw|52.22977|21.01178|PL|1702139|Europe/Warsaw
+Lisbon|38.71667|-9.13333|PT|517802|Europe/Lisbon
+Saint Petersburg|59.93863|30.31413|RU|5028000|Europe/Moscow
+Moscow|55.75222|37.61556|RU|10381222|Europe/Moscow
+Mecca|21.42664|39.82563|SA|1323624|Asia/Riyadh
+Jeddah|21.54238|39.19797|SA|2867446|Asia/Riyadh
+Stockholm|59.33258|18.0649|SE|1515017|Europe/Stockholm
+Singapore|1.28967|103.85007|SG|3547809|Asia/Singapore
+Dakar|14.6937|-17.44406|SN|2476400|Africa/Dakar
+Bangkok|13.75398|100.50144|TH|5104476|Asia/Bangkok
+Tunis|36.81897|10.16579|TN|693210|Africa/Tunis
+Istanbul|41.01384|28.94966|TR|14804116|Europe/Istanbul
+Taipei|25.04776|121.53185|TW|7871900|Asia/Taipei
+Tainan|22.99083|120.21333|TW|771235|Asia/Taipei
+Odessa|46.47747|30.73262|UA|1001558|Europe/Kiev
+Washington, D.C.|38.89511|-77.03637|US|601723|America/New_York
+Jacksonville|30.33218|-81.65565|US|868031|America/New_York
+Columbus|39.20144|-85.92138|US|46690|America/Indiana/Indianapolis
+Indianapolis|39.76838|-86.15804|US|829718|America/Indiana/Indianapolis
+Baltimore|39.29038|-76.61219|US|621849|America/New_York
+Charlotte|35.22709|-80.84313|US|827097|America/New_York
+Oklahoma City|35.46756|-97.51643|US|631346|America/Chicago
+Philadelphia|39.95233|-75.16379|US|1567442|America/New_York
+Memphis|35.14953|-90.04898|US|655770|America/Chicago
+Nashville|36.16589|-86.78444|US|530852|America/Chicago
+Austin|30.26715|-97.74306|US|931830|America/Chicago
+Dallas|32.78306|-96.80667|US|1300092|America/Chicago
+Fort Worth|32.72541|-97.32085|US|833319|America/Chicago
+Houston|29.76328|-95.36327|US|2296224|America/Chicago
+Chicago|41.85003|-87.65005|US|2720546|America/Chicago
+Boston|42.35843|-71.05977|US|667137|America/New_York
+Detroit|42.33143|-83.04575|US|677116|America/Detroit
+Brooklyn|40.6501|-73.94958|US|2300664|America/New_York
+Manhattan|40.78343|-73.96625|US|1487536|America/New_York
+New York City|40.71427|-74.00597|US|8175133|America/New_York
+Queens|40.68149|-73.83652|US|2272771|America/New_York
+Phoenix|33.44838|-112.07404|US|1563025|America/Phoenix
+Tucson|32.22174|-110.92648|US|531641|America/Phoenix
+Los Angeles|34.05223|-118.24368|US|3971883|America/Los_Angeles
+Monterey|36.60024|-121.89468|US|28338|America/Los_Angeles
+Napa|38.29714|-122.28553|US|80434|America/Los_Angeles
+San Diego|32.71533|-117.15726|US|1394928|America/Los_Angeles
+San Francisco|37.77493|-122.41942|US|864816|America/Los_Angeles
+San Jose|37.33939|-121.89496|US|1026908|America/Los_Angeles
+Denver|39.73915|-104.9847|US|682545|America/Denver
+Albuquerque|35.08449|-106.65114|US|559121|America/Denver
+Las Vegas|36.17497|-115.13722|US|623747|America/Los_Angeles
+Reno|39.52963|-119.8138|US|241445|America/Los_Angeles
+El Paso|31.75872|-106.48693|US|681124|America/Denver
+Portland|45.52345|-122.67621|US|632309|America/Los_Angeles
+Seattle|47.60621|-122.33207|US|684451|America/Los_Angeles
+Ho Chi Minh City|10.82302|106.62965|VN|3467331|Asia/Ho_Chi_Minh
+Hanoi|21.0245|105.84117|VN|1431270|Asia/Ho_Chi_Minh
+Da Nang|16.06778|108.22083|VN|752493|Asia/Ho_Chi_Minh
+Queenstown|-31.89756|26.87533|ZA|105309|Africa/Johannesburg
+Port Elizabeth|-33.91799|25.57007|ZA|967677|Africa/Johannesburg
+Johannesburg|-26.20227|28.04363|ZA|2026469|Africa/Johannesburg
+Cape Town|-33.92584|18.42322|ZA|3433441|Africa/Johannesburg
