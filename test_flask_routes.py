@@ -25,7 +25,7 @@ class TestFlaskLogin(unittest.TestCase):
         db.engine.dispose()
 
     def test_show_homepage(self):
-        ''' Test home page '''
+        ''' Test home page view with both logged out and logged in users'''
 
         result = self.client.get('/')
         self.assertIn(
@@ -75,14 +75,14 @@ class TestFlaskLogin(unittest.TestCase):
         self.assertIn(b'Add a Trip!', result.data)
 
     def test_show_login(self):
-        ''' Test sign up page '''
+        ''' Test show sign up page '''
 
         result = self.client.get('/login')
         self.assertIn(
             b'Please Sign In', result.data)
 
     def test_process_login(self):
-        ''' Test login process '''
+        ''' Test login process with correct user, invalid user, and wrong password '''
 
         result = self.client.post(
             '/login', data={'email': 'taylor@gmail.com', 'password': 'Abc123'},
@@ -115,7 +115,7 @@ class TestFlaskLogin(unittest.TestCase):
             self.assertIn(b'SIGN UP', result.data)
 
     def test_userhome_page(self):
-        ''' Test user homepage '''
+        ''' Test user details homepage view for logged out and logged in user '''
 
         result = self.client.get("/1", follow_redirects=True)
         self.assertNotIn(b"Add a Trip!", result.data)
@@ -130,14 +130,14 @@ class TestFlaskLogin(unittest.TestCase):
     def test_tripdetails_page(self):
         ''' Test trip details page '''
 
-        ''' Tests non logged in user sees photos but does not see remove from trip'''
+        ''' Tests logged out user should see photos but does not see remove from trip option '''
         result = self.client.post(
             '/view-trip', data={'trip': 1},
             follow_redirects=True)
         self.assertIn(b'Saved Photos', result.data)
         self.assertNotIn(b'Remove from Trip', result.data)
 
-        ''' Tests logged in user sees remove photo option and does not see add trip to favorites option'''
+        ''' Tests logged in user sees remove photo option and does not see add trip to favorites option '''
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['login'] = 1

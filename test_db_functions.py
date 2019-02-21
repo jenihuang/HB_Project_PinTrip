@@ -9,7 +9,7 @@ from seed import *
 
 
 class TestLoginFunctions(unittest.TestCase):
-    ''' Registration validation tests '''
+    ''' Registration tests '''
 
     def setUp(self):
         ''' Connect to flask test client and test database '''
@@ -21,9 +21,8 @@ class TestLoginFunctions(unittest.TestCase):
         db.create_all()
         load_test_data()
 
-        # db.engine.execute(open('test.sql', 'r').read())
-
     def tearDown(self):
+        ''' Run after each test '''
 
         db.session.remove()
         db.drop_all()
@@ -40,6 +39,7 @@ class TestLoginFunctions(unittest.TestCase):
 
     def test_password_isvalid(self):
         ''' Tests if user input password meets password requirements '''
+
         self.assertEqual(password_isvalid('kayak'), False)
         self.assertEqual(password_isvalid('abc123'), False)
         self.assertEqual(password_isvalid('Abc123'), True)
@@ -59,8 +59,6 @@ class TestDatabaseHelpers(unittest.TestCase):
         connect_to_db(app, "postgresql:///testpintrip")
         db.create_all()
         load_test_data()
-
-        # db.engine.execute(open('test.sql', 'r').read())
 
     def tearDown(self):
 
