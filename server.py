@@ -68,6 +68,8 @@ def process_login():
         else:
             flash("Incorrect password!")
             return redirect('/login')
+
+    # user doesn't exist, flash error message
     else:
         flash('Sorry, that email does not exist!')
         return redirect('/login')
@@ -110,6 +112,7 @@ def process_signup():
         flash('Password must contain 1 of: Uppercase, lowercase, number')
         return redirect('/signup')
 
+    # check if user exists in the database
     user = User.get_user_by_email(input_email)
     if user:
         flash('Sorry that email is already registered')
@@ -133,6 +136,7 @@ def process_signup():
         # add current user's id to the session
         session['login'] = user_id
 
+        # redirect user to user homepage
         return redirect(url_for('userhome', user_id=user_id))
 
 
@@ -158,8 +162,10 @@ def userhome(user_id):
 def trip_details():
     '''shows details and photos for each trip board'''
 
+    # obtain trip_id from the request form
     trip_id = request.form.get("trip")
 
+    # get trip from the database using trip_id
     trip = Trip.get_trip(trip_id)
     photos = trip.photos
     user = session.get('login')
@@ -195,21 +201,28 @@ def remove_trip():
     trip_id = request.form.get("trip")
     user_id = request.form.get("user")
 
+    # get trip from the database
     trip = Trip.get_trip(trip_id)
 
+    # if the trip exists in the database
     if trip:
+
+        # check if trip owner is same as logged in user
         if session.get('login') == trip.user_id:
 
+            # get all liked relationship items for this trip from the database
             liked = LikedTrip.query.get(trip_id)
             liked_trips = TripUserLikes.query.filter(
                 TripUserLikes.trip_id == trip_id).all()
 
+            # if the trip has any liked relationships
             if liked_trips:
                 # remove all liked trip relationships from the database
                 for liked_trip in liked_trips:
                     db.session.delete(liked_trip)
                     db.session.commit()
 
+            # remove the liked trip and trip from the database
             db.session.delete(liked)
             db.session.delete(trip)
             db.session.commit()
@@ -247,7 +260,6 @@ def add_photo_to_trip():
             db.session.commit()
 
         # check if photo already exists in current users trip
-
         already_exists = TripPhotoRelationship.get_trip_photo(trip_id, img_id)
 
         if already_exists:
@@ -308,7 +320,11 @@ def process_results():
     city = cityname_is_valid(city_name)
 
     if city:
+
+        # call API function to get flickr photos for that city and tag
         photos = search_photos_by_city(city.name, tag)
+
+        # look up the related trip in the database
         trip = get_trip_by_user_city(user_id, city.name)
 
         if photos:
@@ -424,32 +440,42 @@ def remove_from_favorites():
 
 @app.route('/get-map', methods=['POST'])
 def get_map():
+    ''' Shows a map with pins of photos for the trip '''
 
     trip_id = request.form.get('trip-map')
     trip = Trip.get_trip(trip_id)
 
+    # if the trip exists in the database
     if trip:
         photos = trip.photos
 
+        # get city center coordinates to center map
         lon = trip.city.lon
         lat = trip.city.lat
 
+        # turn city center coordinates into dictionary object
         city_geo = {"lon": lon, "lat": lat}
 
         trip_photos = []
 
+        # loop through each photo in the trip object
         for photo in photos:
+
+            # extract photo details and create dictionary for each photo with details
             photo_details = {'img_id': photo.img_id,
                              'url': photo.url, 'lat': photo.lat, 'lon': photo.lon}
+
+            # append photo details dictionary to trip_photos list
             trip_photos.append(photo_details)
 
+        # pass variables to html template as json objects
         return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
     else:
         flash('Sorry could not find this trip!')
         return redirect('/')
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     app.debug = True
     connect_to_db(app)
     app.run(host="0.0.0.0")
