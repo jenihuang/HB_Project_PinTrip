@@ -114,6 +114,7 @@ def search_photos_by_city(cityname, tags=''):
                                 per_page='50', format='json')
 
     '''parse json data that was returned from the api call'''
+    #put into database as a string, 
     results = json.loads(data)
 
     if results.get('stat') == 'fail':
