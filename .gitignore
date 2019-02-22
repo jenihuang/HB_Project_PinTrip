@@ -6,3 +6,4 @@ env
 htmlcov
 untracked
 *.md
+trie.py

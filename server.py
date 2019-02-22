@@ -3,6 +3,7 @@
 # import flickrapi
 import hashlib
 import requests
+import requests_cache
 from helper_functions import *
 
 from jinja2 import StrictUndefined
@@ -12,7 +13,7 @@ from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelations
 
 
 app = Flask(__name__)
-# app.url_map.strict_slashes = False
+
 
 # key to use Flask session and debug toolbar
 app.secret_key = "SECRETSECRETSECRET"
