@@ -23,6 +23,29 @@ app.jinja_env.undefined = StrictUndefined
 
 # map_box_key = os.environ.get('MABOX_KEY')
 
+CACHE = {}
+
+
+@app.route('/update')
+def update():
+
+    POPOULAR_CITIES = ['amsterdam', 'bangkok', 'barcelona', 'beijing', 'boston',
+                       'cape town', 'dublin', 'havana', 'hong kong', 'kyoto',
+                       'london', 'monterey', 'montreal', 'napa', 'new york city',
+                       'paris', 'rome', 'san francisco', 'seattle', 'seoul',
+                       'shanghai', 'singapore', 'tokyo', 'toronto']
+
+    for city in POPOULAR_CITIES:
+        if city.title() not in CACHE:
+            try:
+                photos = update_cache(city)
+                if photos:
+                    CACHE[city.title()] = photos
+            except:
+                continue
+
+    return redirect('/')
+
 
 @app.route('/')
 def show_homepage():
@@ -322,13 +345,13 @@ def process_results():
 
     if city:
 
-        # call API function to get flickr photos for that city and tag
-        photos = search_photos_by_city(city.name, tag)
-
-        # look up the related trip in the database
         trip = get_trip_by_user_city(user_id, city.name)
 
-        if photos:
+        # call API function to get flickr photos for that city and tag, or cache
+        output = search_photos_by_city(city.name, tag)
+
+        if output:
+            photos = convert_photo_data(output, city.name)
             return render_template('results.html', photos=photos, trip=trip)
 
         else:

@@ -96,7 +96,9 @@ def get_photo_location(img_id):
     return location
 
 
-def search_photos_by_city(cityname, tags=''):
+def search_photos_by_city(cityname, tag=''):
+
+    os.chdir('/home/vagrant/src/PinTrip/cache')
 
     city = cityname.strip()
     city = city.title()
@@ -107,18 +109,39 @@ def search_photos_by_city(cityname, tags=''):
     city_lon = city_object.lon
     city_lat = city_object.lat
 
-    '''calling flickr api function'''
-    data = flickr.photos.search(tags=tags,
-                                sort='interestingness-desc',
-                                accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
-                                per_page='50', format='json')
+    filename = '{}{}.json'.format(city, tag)
+    filepath = '/cache/{}'.format(filename)
 
-    '''parse json data that was returned from the api call'''
-    #put into database as a string, 
-    results = json.loads(data)
+    if os.path.isfile(filename):
+        # read out data from the file
+        with open(filename) as json_file:
+            data = json.load(json_file)
+
+        results = json.loads(data)
+
+    else:
+        '''calling flickr api function'''
+        data = flickr.photos.search(tags=tag,
+                                    sort='interestingness-desc',
+                                    accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
+                                    per_page='200', format='json')
+
+        results = json.loads(data)
+        json_data = json.dumps(results)
+
+        # save_path = '/cache/'
+        # filepath = os.path.join(save_path, filename)
+
+        with open(filename, 'w') as outfile:
+            json.dump(json_data, outfile)
 
     if results.get('stat') == 'fail':
-        return []
+        return None
+    else:
+        return results
+
+
+def convert_photo_data(results, city):
 
     details = results['photos']['photo']
 
@@ -143,5 +166,5 @@ def search_photos_by_city(cityname, tags=''):
     return photos
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     connect_to_db(app)
