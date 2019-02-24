@@ -245,9 +245,12 @@ def remove_trip():
                 for liked_trip in liked_trips:
                     db.session.delete(liked_trip)
                     db.session.commit()
+                db.session.delete(liked)
+                db.sesison.commit()
 
+            else:
+                pass
             # remove the liked trip and trip from the database
-            db.session.delete(liked)
             db.session.delete(trip)
             db.session.commit()
 

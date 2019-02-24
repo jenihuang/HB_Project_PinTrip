@@ -11,13 +11,13 @@
       <form action="/add-fav" method="POST">
         <input type="hidden" name="trip" value={{ trip.trip_id }}>
         <input type="hidden" name="user" value={{ session.get('login') }}>
-        <input type="submit" class="btn btn-link" value="Add to Favorites">
+        <input type="submit" class="btn btn-danger" value="Add to Favorites">
       </form>
         {% endif %}
 
       <form action="/get-map" method="POST">
         <input type="hidden" name="trip-map" value={{ trip.trip_id }}>
-        <input type="submit" class="btn btn-link" value="Get Map">
+        <input type="submit" class="btn btn-success" value="Get Map">
 
   <section id="blocks">
     {% for photo in photos %}

@@ -13,7 +13,7 @@
             <form action="/view-trip" method="POST">
               <input type="hidden" name="user" value={{ trip.user_id }}>
               <input type="hidden" name="trip" value={{ trip.trip_id }}>
-              <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive" />
+              <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive overlay" />
             </form>
           {% else %}
               <h4> Sorry this trip does not have any photos</h4>

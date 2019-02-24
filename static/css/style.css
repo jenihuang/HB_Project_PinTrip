@@ -10,8 +10,6 @@
    top: 0;
   }
 
-
-
   .sticky{
     position: fixed;
     top: 0;
@@ -19,7 +17,7 @@
   }
 
   .sticky+ .content{
-    padding-top: 60px;
+    padding-top: 20px;
   }
 
   .wrapper{
@@ -31,7 +29,7 @@
     margin: 10px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between
+/*    justify-content: space-between*/
   }
 
   .results {
@@ -58,7 +56,7 @@
   .overlay{
     max-width: 100%;
     height: auto;
-    opacity: 0.5;
+    opacity: 0.8;
   }
 
   #map { 
@@ -70,12 +68,15 @@
 
   .mapboxgl-popup {
     max-width: 400px;
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
   }
 
   img.photo-details {
-    height: 150px;
-    width: 150px;
+    height: 220px;
+    width: 220px;
+  }
+
+  #navbar {
+    overflow: hidden;
   }
 
   .navbar {

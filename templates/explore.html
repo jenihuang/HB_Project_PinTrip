@@ -13,16 +13,11 @@
           <form action="/view-trip" method="POST">
             <input type="hidden" name="user" value={{ trip.user_id }}>
             <input type="hidden" name="trip" value={{ trip.trip_id }}>
-            <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive" />
+            <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive overlay">
           </form>
           {% else %}
               <h4> Sorry this trip does not have any photos</h4>
           {% endif %}
-<!--     <form action="/view-trip" method="POST">
-        <input type="hidden" name="user" value={{ trip.user_id }}>
-        <input type="hidden" name="trip" value={{ trip.trip_id }}>
-        <input type="submit" class="btn btn-link" value="View Details">
-    </form> -->
     </div>
     {% endfor %}
   </section>
@@ -30,4 +25,17 @@
   <h3> Whoops! There are currently no trips in our database. </h3>
 {% endif %}
 
+<script>
+
+// $('.overlay').onhover(
+//    function(){ $(this).removeClass('overlay')})
+
+function handleHoverPhoto() {
+  $('input.img-responsive').on('hover', (evt) => {
+    (evt.target).removeClass('overlay');
+  }
+
+handleHoverPhoto();
+
+</script>
 {% endblock %}

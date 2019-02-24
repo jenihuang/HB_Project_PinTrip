@@ -45,6 +45,7 @@
 function handleAddSubmit() {
   $('form.add-trip-form').on('submit', (evt) => {
     evt.preventDefault();
+    alert('Photo added')
 
     const formInputs = {
       'img_id': $(evt.target).data( "img_id" ),
