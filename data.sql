@@ -2494,17 +2494,17 @@ COPY public.trip_user_likes_rel (relationship_id, trip_id, user_id) FROM stdin;
 --
 
 COPY public.trips (trip_id, name, user_id, city_name) FROM stdin;
-1	taySF	1	San Francisco
-3	Ellen SF	5	San Francisco
-4	Ellen Napa	5	Napa
-6	Ducking Amazing Monterey Trip	4	Monterey
-7	Donald Duck SF	4	San Francisco
-9	Ellen Beijing Trip	5	Beijing
+1	SF Pupventures	1	San Francisco
+3	Test SF Trip	5	San Francisco
+4	Test Napa	5	Napa
+6	Otter Monterey Trip	4	Monterey
+7	Otter this world	4	San Francisco
+9	Test Beijing	5	Beijing
 10	Bonjour Paris	3	Paris
 11	London London Bridge	3	London
 12	Roma	3	Rome
-13	Wheenay	6	San Francisco
-14	SH	6	Shanghai
+13	Jenica Hometrip	6	San Francisco
+14	Jenica SH	6	Shanghai
 \.
 
 
@@ -2513,11 +2513,11 @@ COPY public.trips (trip_id, name, user_id, city_name) FROM stdin;
 --
 
 COPY public.users (user_id, fname, lname, email, password) FROM stdin;
-1	Taylor	Swift	taylor@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
-2	Bob	Barker	bob@yahoo.com	61bd60c60d9fb60cc8fc7767669d40a1
-3	Cindy	Loo	cindy@hotmail.com	61bd60c60d9fb60cc8fc7767669d40a1
-4	Donald	Duck	duck@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
-5	Ellen	Degeneres	ellen@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
+1	Cute	Puppy	puppy@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
+2	User	Two	U2@yahoo.com	61bd60c60d9fb60cc8fc7767669d40a1
+3	User	Three	user3@hotmail.com	61bd60c60d9fb60cc8fc7767669d40a1
+4	Significant	Otter	otter@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
+5	Test	Test	test@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
 6	Sunny	Day	sunny.day@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
 7	Jenica	Huang	jenica.huang@gmail.com	61bd60c60d9fb60cc8fc7767669d40a1
 8	Hackbright	Student	student@hackbright.com	61bd60c60d9fb60cc8fc7767669d40a1

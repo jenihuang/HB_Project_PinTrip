@@ -118,13 +118,14 @@ def search_photos_by_city(cityname, tag=''):
             data = json.load(json_file)
 
         results = json.loads(data)
+        print('used cache')
 
     else:
         '''calling flickr api function'''
         data = flickr.photos.search(tags=tag,
                                     sort='interestingness-desc',
                                     accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
-                                    per_page='200', format='json')
+                                    per_page='50', format='json')
 
         results = json.loads(data)
         json_data = json.dumps(results)

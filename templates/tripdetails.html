@@ -18,10 +18,10 @@
       <form action="/get-map" method="POST">
         <input type="hidden" name="trip-map" value={{ trip.trip_id }}>
         <input type="submit" class="btn btn-link" value="Get Map">
-  <section id="results">
+
+  <section id="blocks">
     {% for photo in photos %}
-    <br>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 img-results">
+    <div class="results">
         <img src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
       {% if session.get('login') == trip.user_id %}
       <form 

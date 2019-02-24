@@ -3,7 +3,7 @@
 {% block title %} My Trips {% endblock %}
 
 {% block content %}
-<h1>Add a Trip!</h1>
+<h3>Add a Trip!</h3>
 <a data-toggle="modal" href="#myModal" class="btn btn-primary">Create Board</a>
 <div class="modal fade" id="myModal">
     <div class="modal-dialog">
@@ -27,24 +27,28 @@
 <br><br><br>
 
 {% if trips %}
-  <section id="results">
+  <section id="blocks">
     {% for trip in trips %}
+    <div class="results">
     <h3>{{ trip.name }}</h3>
           {% if trip.photos %}
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 img-results">
-              <img src="{{ trip.photos[0].url }}" class="img-responsive"></div>
+          <form action="/view-trip" method="POST">
+          <input type="hidden" name="trip" value={{ trip.trip_id }}>
+          <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive" />
+          </form>
           {% else %}
               <h4> Sorry this trip does not have any photos</h4>
           {% endif %}
-      <form action="/view-trip" method="POST">
+<!--       <form action="/view-trip" method="POST">
         <input type="hidden" name="trip" value={{ trip.trip_id }}>
         <input type="submit" class="btn btn-link" value="View Details">
-      </form>
+      </form> -->
       <form action="/remove-trip" method="POST">
         <input type="hidden" name="user" value={{ session.get('login') }}>
         <input type="hidden" name="trip" value={{ trip.trip_id }}>
         <input type="submit" class="btn btn-link" value="Remove Trip">
       </form>
+      </div>
       <br><br>
     {% endfor %}
   </section>
