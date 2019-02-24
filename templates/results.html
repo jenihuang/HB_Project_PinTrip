@@ -14,7 +14,7 @@
     <div class="results">
       {% if session.get('login') and trip %}
         <img src="{{ photo.url }}" data-src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
-
+        <br>
         <form class="add-trip-form"
         data-img_id="{{photo.img_id}}"
         data-url="{{photo.url}}" 
@@ -25,7 +25,7 @@
         id="form-{{photo.img_id}}" 
         action="/add-photo"
         method="POST">
-        <input type="submit" class="btn btn-link" value="Add to Trip">
+        <input type="submit" class="btn btn-outline-dark my-2 my-sm-0 photobutton" value="Add to Trip">
       </form>
 
       {% else %}
@@ -41,6 +41,17 @@
 <script>
 
 "use strict";
+
+window.onscroll = function() {toggleNav()};
+let navbar = document.getElementById("navbar");
+let sticky = navbar.offsetTop;
+function toggleNav() {
+  if (window.pageYOffset >= sticky) {
+    navbar.classList.add("sticky")
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
 
 function handleAddSubmit() {
   $('form.add-trip-form').on('submit', (evt) => {

@@ -8,7 +8,7 @@
   <section id="blocks">
     {% for trip in trips %}
     <div class="results">
-    <h3>{{ trip.name }}</h3>
+    <h4>{{ trip.name }}</h4>
           {% if trip.photos %}
             <form action="/view-trip" method="POST">
               <input type="hidden" name="user" value={{ trip.user_id }}>

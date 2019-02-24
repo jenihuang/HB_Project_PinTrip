@@ -30,19 +30,18 @@
   <section id="blocks">
     {% for trip in trips %}
     <div class="results">
-    <h3>{{ trip.name }}</h3>
           {% if trip.photos %}
           <form class='testing' action="/view-trip" method="POST">
           <input type="hidden" name="trip" value={{ trip.trip_id }}>
-          <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive overlay" />
+          <input type="image" name="submit" src="{{ trip.photos[0].url }}" border="0" alt="Submit" class="img-responsive overlay" />      
           </form>
           {% else %}
-              <h4> Sorry this trip does not have any photos</h4>
+              <h3> There are no photos in this trip!</h3>
           {% endif %}
       <form class="remove-trip" action="/remove-trip" method="POST">
         <input type="hidden" name="user" value={{ session.get('login') }}>
         <input type="hidden" name="trip" value={{ trip.trip_id }}>
-        <input type="submit" class="btn btn-link" value="Remove Trip">
+        <input type="submit" class="btn btn-outline-dark my-2 my-sm-0 photobutton" value="Remove {{trip.name}}">
       </form>
       </div>
       <br><br>
