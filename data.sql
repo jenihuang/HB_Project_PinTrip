@@ -488,6 +488,8 @@ COPY public.liked_trips (trip_id) FROM stdin;
 9
 7
 11
+6
+10
 \.
 
 
@@ -2418,6 +2420,14 @@ COPY public.photos (img_id, url, lon, lat, city_name) FROM stdin;
 33136749358	https://c2.staticflickr.com/8/7865/33136749358_2b014bc94e.jpg	-79.388337000000007	43.6378660000000025	Toronto
 32808023188	https://c2.staticflickr.com/5/4853/32808023188_7d10d88fcc.jpg	-79.3730730000000051	43.6506690000000006	Toronto
 46724500602	https://c2.staticflickr.com/8/7875/46724500602_64ae712de8.jpg	-79.3668109999999984	43.6429690000000008	Toronto
+31897775547	https://c2.staticflickr.com/8/7866/31897775547_1d8cb84e7d.jpg	-73.5575170000000043	45.4934909999999988	Montreal
+46210391584	https://c2.staticflickr.com/8/7801/46210391584_b988c027c1.jpg	-73.5880279999999942	45.4742079999999973	Montreal
+46337692514	https://c2.staticflickr.com/8/7835/46337692514_9587edb39f.jpg	-73.5637660000000011	45.5578140000000005	Montreal
+46279680864	https://c2.staticflickr.com/8/7860/46279680864_53f4fc79c1.jpg	-73.5582299999999947	45.5057749999999999	Montreal
+32227278727	https://c2.staticflickr.com/8/7806/32227278727_5495f55f2f.jpg	-73.5613780000000048	45.5035579999999982	Montreal
+47084823262	https://c2.staticflickr.com/8/7860/47084823262_c819a41e08.jpg	-73.5821339999999964	45.5052189999999968	Montreal
+46534409752	https://c2.staticflickr.com/5/4855/46534409752_d6dedbd846.jpg	-73.5548399999999987	45.5577680000000029	Montreal
+46251176555	https://c2.staticflickr.com/8/7901/46251176555_990fdb0e66.jpg	121.452856999999995	31.2175699999999985	Shanghai
 \.
 
 
@@ -2496,15 +2506,17 @@ COPY public.trip_photos_rel (relationship_id, trip_id, photo_id) FROM stdin;
 159	4	37929416104
 161	4	31302891431
 162	4	27593150866
-163	15	46146178175
-164	15	40108077633
-165	15	33208680118
-166	15	32912831278
-167	15	47041438532
-168	15	32218495407
-169	15	33136749358
-170	15	32808023188
-171	15	46724500602
+172	25	31897775547
+173	25	46210391584
+174	25	46337692514
+175	25	46279680864
+176	25	32227278727
+178	25	46534409752
+179	26	33184501068
+180	26	32071925187
+181	26	45921904515
+182	26	46251176555
+183	26	45905679535
 \.
 
 
@@ -2523,6 +2535,8 @@ COPY public.trip_user_likes_rel (relationship_id, trip_id, user_id) FROM stdin;
 9	9	3
 10	7	3
 11	11	6
+12	6	5
+13	10	5
 \.
 
 
@@ -2542,7 +2556,8 @@ COPY public.trips (trip_id, name, user_id, city_name) FROM stdin;
 12	Roma	3	Rome
 13	Jenica Hometrip	6	San Francisco
 14	Jenica SH	6	Shanghai
-15	6ix	5	Toronto
+25	Mtl Trip	5	Montreal
+26	Test SH	5	Shanghai
 \.
 
 
@@ -2580,21 +2595,21 @@ SELECT pg_catalog.setval('public.photos_img_id_seq', 1, false);
 -- Name: trip_photos_rel_relationship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('public.trip_photos_rel_relationship_id_seq', 171, true);
+SELECT pg_catalog.setval('public.trip_photos_rel_relationship_id_seq', 183, true);
 
 
 --
 -- Name: trip_user_likes_rel_relationship_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('public.trip_user_likes_rel_relationship_id_seq', 11, true);
+SELECT pg_catalog.setval('public.trip_user_likes_rel_relationship_id_seq', 13, true);
 
 
 --
 -- Name: trips_trip_id_seq; Type: SEQUENCE SET; Schema: public; Owner: vagrant
 --
 
-SELECT pg_catalog.setval('public.trips_trip_id_seq', 15, true);
+SELECT pg_catalog.setval('public.trips_trip_id_seq', 26, true);
 
 
 --
