@@ -4,6 +4,7 @@
 import hashlib
 import requests
 import requests_cache
+import word_trie
 from helper_functions import *
 
 from jinja2 import StrictUndefined
@@ -500,6 +501,14 @@ def get_map():
     else:
         flash('Sorry could not find this trip!')
         return redirect('/')
+
+
+@app.route('/auto')
+def autocomplete():
+
+    prefix = request.args.get('prefix')
+    results = t.prefix_search(prefix)
+    return results
 
 
 if __name__ == "__main__":  # pragma: no cover
