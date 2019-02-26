@@ -29,5 +29,15 @@
 {% else %}
   <h3> Sorry you do not have any favorite trips yet.</h3>
 {% endif %}
+<script>
+    const test = $('.remove-fav');
+
+    test.on('submit', (evt) => {
+    let r = confirm('Are you sure you want to delete this trip?')
+    if (r == false){
+      evt.preventDefault();
+    }
+  })
+</script>
 
 {% endblock %}

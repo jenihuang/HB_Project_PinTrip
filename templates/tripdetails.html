@@ -21,8 +21,8 @@
 
   <section id="blocks">
     {% for photo in photos %}
-    <div class="results">
-        <img src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
+    <div class="details">
+        <img src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-details">
       {% if session.get('login') == trip.user_id %}
       <form 
           data-trip="{{ trip.trip_id }}"

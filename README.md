@@ -26,31 +26,31 @@ Once the trip board is complete, users can view a map of their trip which pins a
 # Features
 
 ### Home
-![homepage](#)
+![homepage](/screenshots/Homepage.png)
 
 ### Login
-![login](#)
+![login](/screenshots/Login.png)
 
 ### Signup
-![signup](#)
+![signup](/screenshots/Register.png)
 
 ### Search Results
 ![results](#)
 
 ### My Trips
-![user](#)
+![user](/screenshots/Trips.png)
 
 ### Trip Details
-![view-trip](#)
+![view-trip](/screenshots/Details.png)
 
 ### Trip Map
-![get-map](#)
+![get-map](/screenshots/Map.png)
 
 ### Explore Trips
-![explore](#)
+![explore](/screenshots/Explore.png)
 
 ### Favorite Trips
-![favorites](#)
+![favorites](/screenshots/Favorites.png)
 
 
 

@@ -47,7 +47,6 @@
     margin: 10px;
     display: flex;
     flex-wrap: wrap;
-/*    justify-content: space-between*/
   }
 
   .results {
@@ -61,6 +60,19 @@
     width: 100%;
     box-sizing: border-box;
     flex: 0 1 23%;
+  }
+
+  .details {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 0 1 31.5%;
   }
 
   .results h3{
@@ -82,6 +94,16 @@
   .img-responsive{
     max-width: 100%;
     max-height: 200px;
+    margin: auto;
+    top: -50%;
+    bottom: -50%;
+    left: -50%;
+    right: -50%;
+  }
+
+  .img-details{
+    max-width: 100%;
+    max-height: 300px;
     margin: auto;
     top: -50%;
     bottom: -50%;
@@ -181,6 +203,106 @@
 [class*="col-"] {
     padding: 1rem;
 }
+
+
+/* login page */
+
+@import url('https://fonts.googleapis.com/css?family=Numans');
+
+body.login{
+background-image: url('../imgs/seine.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+font-family: 'Numans', sans-serif;
+}
+
+body.signin{
+background-image: url('../imgs/nyc.jpg');
+background-size: cover;
+background-repeat: no-repeat;
+height: 100%;
+font-family: 'Numans', sans-serif;
+}
+
+.container{
+height: 100%;
+align-content: center;
+}
+
+.card{
+height: 370px;
+margin-top: auto;
+margin-bottom: auto;
+width: 400px;
+background-color: rgba(0,0,0,0.5) !important;
+}
+
+.social_icon span{
+font-size: 60px;
+margin-left: 10px;
+color: #FFC312;
+}
+
+.social_icon span:hover{
+color: white;
+cursor: pointer;
+}
+
+.card-header h3{
+color: white;
+}
+
+.social_icon{
+position: absolute;
+right: 20px;
+top: -45px;
+}
+
+.input-group-prepend span{
+width: 50px;
+background-color: #f8f9fa;
+color: black;
+border:0 !important;
+}
+
+input:focus{
+outline: 0 0 0 0  !important;
+box-shadow: 0 0 0 0 !important;
+
+}
+
+.remember{
+color: white;
+}
+
+.remember input
+{
+width: 20px;
+height: 20px;
+margin-left: 15px;
+margin-right: 5px;
+}
+
+.login_btn{
+color: black;
+background-color: #f8f9fa;
+width: 100px;
+}
+
+.login_btn:hover{
+color: black;
+background-color: white;
+}
+
+.links{
+color: white;
+}
+
+.links a{
+margin-left: 4px;
+}
+
 
 
 
