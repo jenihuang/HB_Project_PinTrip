@@ -35,7 +35,13 @@
       </button>
 
       <form autocomplete="off" action='/results' method='POST' class="form-inline my-2 my-lg-0">
-        <input id="search-city" class="form-control mr-sm-2" type="search" name='city' placeholder="City" aria-label="City">
+<!--         <input id="search-city" class="form-control mr-sm-2" type="search" name='city' placeholder="City" aria-label="City"> -->
+        <li class="nav-item dropdown">
+        <input class="nav-link dropdown-toggle form-control mr-sm-2" id="search-city" type="search" name='city' placeholder="City" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+        </div>
+        </li>
+
         <input class="form-control mr-sm-2" type="search" name='tag' placeholder="Tag" aria-label="Tag">
         <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Show Me Photos!</button>
       </form>
@@ -58,12 +64,12 @@
           <a class="nav-link" href="/explore">Explore</a>
         </li>
 
-        <li class="nav-item dropdown">
-        <input class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+<!--     <li class="nav-item dropdown">
+        <input class="nav-link dropdown-toggle form-control mr-sm-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item">Test</a>
         </div>
-      </li>
+        </li> -->
 
         {% if session.get('login') %}
         <li class="nav-item">
@@ -109,7 +115,7 @@ function getSuggestions(evt) {
   $.get(url, inputData, showSuggestions);
 }
 
-$("#navbarDropdown").on('keyup', getSuggestions);
+$("#search-city").on('keyup', getSuggestions);
 
 
 
@@ -117,7 +123,7 @@ $("#navbarDropdown").on('keyup', getSuggestions);
 function addToInput(evt){
   let clickedCity = $(evt.target).text();
   console.log(clickedCity);
-  $("#navbarDropdown").val(clickedCity);
+  $("#search-city").val(clickedCity);
 }
 
 $("p.dropdown-item").on('click', addToInput);
