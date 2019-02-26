@@ -10,6 +10,10 @@
    top: 0;
   }
 
+  .dropdown-menu{
+    z-index: 1000000;
+  }
+
   .sticky{
     position: fixed;
     top: 0;
@@ -54,6 +58,13 @@
     margin: 10px 0;
   }
 
+  .results h4{
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    font-size: 20px;
+    color: #343a40;
+  }
+
   .img-responsive{
     max-width: 100%;
     max-height: 200px;
@@ -68,6 +79,8 @@
     font-size: .8rem;
     line-height: .5;
     margin: 0 auto;
+    color: rgba(0,0,0,.5);
+    border-color: #f8f9fa;
   }
 
 /*  div.image {
@@ -115,7 +128,7 @@
   }
 
   #navbar {
-    overflow: hidden;
+/*    overflow: hidden;*/
   }
 
   .navbar {

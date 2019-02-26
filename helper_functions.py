@@ -3,6 +3,7 @@ import string
 import os
 import flickrapi
 import json
+from collections import OrderedDict
 from flask import Flask
 from model import *
 
@@ -79,6 +80,21 @@ api_secret = os.environ.get('FLICKR_SECRET')
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
 
+def asdict(self):
+    result = OrderedDict()
+    for key in self.__mapper__.c.keys():
+        if getattr(self, key) is not None:
+            result[key] = str(getattr(self, key))
+        else:
+            result[key] = getattr(self, key)
+    return result
+
+
+def to_array(all_photos):
+    p = [photo.asdict() for photo in all_photos]
+    return json.dumps(p)
+
+
 def get_photo_location(img_id):
     '''get lat and lon information for photo'''
 
@@ -114,6 +130,7 @@ def search_photos_by_city(cityname, tag=''):
 
     if os.path.isfile(filename):
         # read out data from the file
+        print('inside the cache')
         with open(filename) as json_file:
             data = json.load(json_file)
 
@@ -125,16 +142,14 @@ def search_photos_by_city(cityname, tag=''):
         data = flickr.photos.search(tags=tag,
                                     sort='interestingness-desc',
                                     accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
-                                    per_page='50', format='json')
+                                    per_page='10', format='json')
 
         results = json.loads(data)
-        json_data = json.dumps(results)
-
-        # save_path = '/cache/'
-        # filepath = os.path.join(save_path, filename)
+        photos_json = convert_photo_data(results, city)
+        # json_data = json.dumps(photos_json)
 
         with open(filename, 'w') as outfile:
-            json.dump(json_data, outfile)
+            json.dump(photos_json, outfile)
 
     if results.get('stat') == 'fail':
         return None
@@ -162,9 +177,12 @@ def convert_photo_data(results, city):
         lon = location.get('lon')
         photo = Photo(img_id=img_id, url=source_url,
                       lon=lon, lat=lat, city_name=city)
-        photos.append(photo)
+        db.session.add(photo)
+        db.session.commit()
 
-    return photos
+        photos.append(img_id)
+
+    return json.dumps(photos)
 
 
 if __name__ == "__main__":  # pragma: no cover

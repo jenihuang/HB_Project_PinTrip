@@ -30,6 +30,7 @@
   <section id="blocks">
     {% for trip in trips %}
     <div class="results">
+      <h4>{{ trip.name }}</h4>
           {% if trip.photos %}
           <form class='testing' action="/view-trip" method="POST">
           <input type="hidden" name="trip" value={{ trip.trip_id }}>

@@ -4,7 +4,7 @@
 import hashlib
 import requests
 import requests_cache
-import word_trie
+from word_trie import *
 from helper_functions import *
 
 from jinja2 import StrictUndefined
@@ -503,12 +503,13 @@ def get_map():
         return redirect('/')
 
 
-@app.route('/auto')
+@app.route('/auto.json')
 def autocomplete():
 
     prefix = request.args.get('prefix')
     results = t.prefix_search(prefix)
-    return results
+    print(results)
+    return jsonify(results)
 
 
 if __name__ == "__main__":  # pragma: no cover

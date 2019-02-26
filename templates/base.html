@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:500|Caveat|Covered+By+Your+Grace|Kalam|Mali|Neucha" rel="stylesheet">
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
   <link href="../static/css/style.css" rel="stylesheet">
 
@@ -33,9 +34,8 @@
       <span class="navbar-toggler-icon"></span>
       </button>
 
-      <form action='/results' method='POST' class="form-inline my-2 my-lg-0">
+      <form autocomplete="off" action='/results' method='POST' class="form-inline my-2 my-lg-0">
         <input id="search-city" class="form-control mr-sm-2" type="search" name='city' placeholder="City" aria-label="City">
-        <div id="suggestion-box"></div>
         <input class="form-control mr-sm-2" type="search" name='tag' placeholder="Tag" aria-label="Tag">
         <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Show Me Photos!</button>
       </form>
@@ -57,6 +57,14 @@
         <li class="nav-item">
           <a class="nav-link" href="/explore">Explore</a>
         </li>
+
+        <li class="nav-item dropdown">
+        <input class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item">Test</a>
+        </div>
+      </li>
+
         {% if session.get('login') %}
         <li class="nav-item">
           <a class="nav-link disabled" href="/logout">Logout</a>
@@ -82,19 +90,37 @@
 </div>
 <script>
 
-  function showSuggestions(results) {
-    $("#suggestion-box").show()
-    $("#suggestion-box").html(results);
-  }
+function showSuggestions(results) {
+  $("li.nav-item.dropdown.show div.dropdown-menu").empty();
+  $("dropdown-menu").show();
 
-  function getSuggestions(evt) {
-    let url = "/auto";
-    let inputData = {"prefix": $(evt.target).val()};
+  for (let i = 0; i < results.length; i++) {                               
+      let city = results[i];
+      $("li.nav-item.dropdown.show div.dropdown-menu").append(`<p class="dropdown-item" href="#">${city}</p>`);
+      // $('li.nav-item.dropdown.show div.dropdown-menu')
+    }
+}
 
-    $.get(url, inputData, replaceForecast);
-  }
 
-  $("#search-city").on('keyup', getSuggestions);
+function getSuggestions(evt) {
+  let url = "/auto.json";
+  let inputData = {"prefix": $(evt.target).val()};
+
+  $.get(url, inputData, showSuggestions);
+}
+
+$("#navbarDropdown").on('keyup', getSuggestions);
+
+
+
+
+function addToInput(evt){
+  let clickedCity = $(evt.target).text();
+  console.log(clickedCity);
+  $("#navbarDropdown").val(clickedCity);
+}
+
+$("p.dropdown-item").on('click', addToInput);
 
 </script>
 

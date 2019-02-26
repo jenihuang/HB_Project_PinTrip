@@ -54,6 +54,9 @@ class Photo(db.Model):
     def __repr__(self):  # pragma: no cover
         return '<Image photo_id={} url={}>'.format(self.img_id, self.url)
 
+    def as_dict(self):
+        return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+
     @classmethod
     def get_photo(cls, img_id):
 

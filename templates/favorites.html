@@ -21,7 +21,7 @@
       <form action="/remove-fav" method="POST">
         <input type="hidden" name="trip" value={{ trip.trip_id }}>
         <input type="hidden" name="user" value={{ session.get('login') }}>
-        <input type="submit" class="btn btn-outline-dark my-2 my-sm-0 photobutton" value="Remove {{trip.name}}">
+        <input type="submit" class="btn btn-outline-dark my-2 my-sm-0 photobutton" value="Remove from Fav">
       </form>
       </div>
     {% endfor %}
