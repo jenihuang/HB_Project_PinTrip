@@ -199,6 +199,10 @@
   .pacifico {
     font-family: 'Pacifico', cursive;
     }
+
+  div.dropdown-menu.show {
+    left: 22px;
+    }
 /*--- Bootstrap Padding Fix --*/
 [class*="col-"] {
     padding: 1rem;
