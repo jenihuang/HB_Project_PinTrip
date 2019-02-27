@@ -188,7 +188,7 @@ def convert_photo_data(results, city):
             print(Photo.get_photo(img_id))
 
         # get photo object from the database
-        obtained_photo = Photo.get_photo(img_id)
+        obtained_photo = Photo.get_photo(img_id).to_json()
 
         # convert ORM object to dictionary
         photo_dict = obtained_photo.__dict__

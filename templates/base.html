@@ -7,8 +7,7 @@
 
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-	<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:500|Caveat|Covered+By+Your+Grace|Kalam|Mali|Neucha" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed|Barlow+Semi+Condensed|IBM+Plex+Mono:400i|IBM+Plex+Sans|Pacifico" rel="stylesheet">
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
   <link href="../static/css/style.css" rel="stylesheet">
 
@@ -61,13 +60,6 @@
           <a class="nav-link" href="/explore">Explore</a>
         </li>
 
-<!--     <li class="nav-item dropdown">
-        <input class="nav-link dropdown-toggle form-control mr-sm-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item">Test</a>
-        </div>
-        </li> -->
-
         {% if session.get('login') %}
         <li class="nav-item">
           <a class="nav-link disabled" href="/logout">Logout</a>
@@ -84,7 +76,7 @@
 
 <div id="extending">
   {% for flash in get_flashed_messages() %}
-    <div class="alert alert-danger" style="width:90%; margin:0 auto;">{{ flash }}</div>
+    <div class="alert alert-info" style="width:90%; margin:0 auto;">{{ flash }}</div>
   {% endfor %}
 <div class="wrapper">
 {% block content %}
