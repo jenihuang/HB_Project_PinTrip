@@ -65,7 +65,7 @@ class Photo(db.Model):
 
     def to_json(self):
 
-        return {"img_id":img_id, "url": url, "lon": lon, "lat": lat, "city_name":city_name}
+        return {"img_id":self.img_id, "url": self.url, "lon": self.lon, "lat": self.lat, "city_name": self.city_name}
 
 
 class Trip(db.Model):

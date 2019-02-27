@@ -185,25 +185,16 @@ def convert_photo_data(results, city):
                           lon=lon, lat=lat, city_name=city)
             db.session.add(photo)
             db.session.commit()
-            print(Photo.get_photo(img_id))
 
         # get photo object from the database
-        obtained_photo = Photo.get_photo(img_id).to_json()
-
-        # convert ORM object to dictionary
-        photo_dict = obtained_photo.__dict__
-
-        '''remove this from the dict as this value is an object that
-        cannot convert to string easily/not used'''
-        del photo_dict['_sa_instance_state']
-
-        # make the img_id the key for the photo in the dictionary
+        obtained_photo = Photo.get_photo(img_id)
+        photo_dict = obtained_photo.to_json()
         key = photo_dict['img_id']
 
         # add key and value to photos dictionary only if not empty
         if bool(photo_dict):
             photos[key] = photo_dict
-            #print('added {}, {}'.format(key, photo_dict))
+            print('added {}, {}'.format(key, photo_dict))
 
     # convert photos dictionary to json and return
     return json.dumps(photos)
