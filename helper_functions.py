@@ -203,7 +203,7 @@ def convert_photo_data(results, city):
         # add key and value to photos dictionary only if not empty
         if bool(photo_dict):
             photos[key] = photo_dict
-            print('added {}, {}'.format(key, photo_dict))
+            #print('added {}, {}'.format(key, photo_dict))
 
     # convert photos dictionary to json and return
     return json.dumps(photos)
