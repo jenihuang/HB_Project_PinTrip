@@ -21,7 +21,7 @@ app.secret_key = "SECRET"
 # raises an error for undefined variables in jinja2
 app.jinja_env.undefined = StrictUndefined
 
-map_box_key = os.environ.get('MABOX_KEY')
+map_box_key = os.environ.get('MAPBOX_KEY')
 
 # CACHE = {}
 
@@ -500,7 +500,7 @@ def get_map():
             trip_photos.append(photo_details)
 
         # pass variables to html template as json objects
-        return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo))
+        return render_template('getmap.html', photos=json.dumps(trip_photos), cityGeo=json.dumps(city_geo), key=map_box_key)
     else:
         flash('Sorry could not find this trip!')
         return redirect('/')

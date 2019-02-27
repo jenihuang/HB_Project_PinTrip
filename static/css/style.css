@@ -210,7 +210,7 @@
 @import url('https://fonts.googleapis.com/css?family=Numans');
 
 body.login{
-background-image: url('../imgs/seine.jpg');
+background-image: url('../imgs/nyc.jpg');
 background-size: cover;
 background-repeat: no-repeat;
 height: 100%;
@@ -218,7 +218,7 @@ font-family: 'Numans', sans-serif;
 }
 
 body.signin{
-background-image: url('../imgs/nyc.jpg');
+background-image: url('../imgs/seine.jpg');
 background-size: cover;
 background-repeat: no-repeat;
 height: 100%;
