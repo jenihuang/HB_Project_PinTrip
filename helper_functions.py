@@ -189,15 +189,7 @@ def convert_photo_data(results, city):
 
         # get photo object from the database
         obtained_photo = Photo.get_photo(img_id)
-
-        # convert ORM object to dictionary
-        photo_dict = obtained_photo.__dict__
-
-        '''remove this from the dict as this value is an object that
-        cannot convert to string easily/not used'''
-        del photo_dict['_sa_instance_state']
-
-        # make the img_id the key for the photo in the dictionary
+        photo_dict = obtained_photo.to_json()
         key = photo_dict['img_id']
 
         # add key and value to photos dictionary only if not empty
