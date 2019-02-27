@@ -4,7 +4,7 @@ import os
 import flickrapi
 import json
 from collections import OrderedDict
-from flask import Flask
+from flask import Flask, jsonify
 from model import *
 
 app = Flask(__name__)
@@ -80,21 +80,6 @@ api_secret = os.environ.get('FLICKR_SECRET')
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
 
-def asdict(self):
-    result = OrderedDict()
-    for key in self.__mapper__.c.keys():
-        if getattr(self, key) is not None:
-            result[key] = str(getattr(self, key))
-        else:
-            result[key] = getattr(self, key)
-    return result
-
-
-def to_array(all_photos):
-    p = [photo.asdict() for photo in all_photos]
-    return json.dumps(p)
-
-
 def get_photo_location(img_id):
     '''get lat and lon information for photo'''
 
@@ -130,19 +115,17 @@ def search_photos_by_city(cityname, tag=''):
 
     if os.path.isfile(filename):
         # read out data from the file
-        print('inside the cache')
         with open(filename) as json_file:
             data = json.load(json_file)
 
         photo_results = json.loads(data)
-        print('used cache')
 
     else:
         '''calling flickr api function'''
         data = flickr.photos.search(tags=tag,
                                     sort='interestingness-desc',
                                     accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
-                                    per_page='50', format='json')
+                                    per_page='100', format='json')
 
         results = json.loads(data)
 
@@ -157,7 +140,6 @@ def search_photos_by_city(cityname, tag=''):
 
         photo_results = json.loads(photo_results)
 
-    print(photo_results)
     return photo_results
 
 
@@ -181,26 +163,23 @@ def convert_photo_data(results, city):
         lat = location.get('lat')
         lon = location.get('lon')
 
-        if Photo.get_photo(img_id):
-            obtained_photo = Photo.get_photo(img_id)
+        if not Photo.get_photo(img_id):
 
-        else:
             photo = Photo(img_id=img_id, url=source_url,
                           lon=lon, lat=lat, city_name=city)
             db.session.add(photo)
             db.session.commit()
-            print('photo added to db')
+            print(Photo.get_photo(img_id))
 
-            obtained_photo = Photo.get_photo(img_id)
-
+        obtained_photo = Photo.get_photo(img_id)
         photo_dict = obtained_photo.__dict__
         del photo_dict['_sa_instance_state']
         key = photo_dict['img_id']
 
-        if photo_dict:
+        if len(photo_dict.keys()) != 0:
             photos[key] = photo_dict
-            print('added {}'.format(key))
-
+            print('added {}, {}'.format(key, photo_dict))
+    print(photos)
     return json.dumps(photos)
 
 

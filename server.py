@@ -353,12 +353,8 @@ def process_results():
 
         # call API function to get flickr photos for that city and tag, orcache
         photos = search_photos_by_city(city.name, tag)
-        # print(obtained_photos)
 
         if photos:
-            print(photos.items())
-            # photos = json.loads(obtained_photos)
-            # print(type(photos))
 
             return render_template('results.html', photos=photos, trip=trip)
 
