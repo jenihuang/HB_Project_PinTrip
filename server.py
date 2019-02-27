@@ -349,15 +349,17 @@ def process_results():
 
     if city:
 
+        # gets trip associated with the user(if any)
         trip = get_trip_by_user_city(user_id, city.name)
 
-        # call API function to get flickr photos for that city and tag, orcache
+        # gets photos dictionary from API call or cached files
         photos = search_photos_by_city(city.name, tag)
 
         if photos:
 
             return render_template('results.html', photos=photos, trip=trip)
 
+        # no photos which means there was an error in the request
         else:
             flash('Sorry there was an error fetching your results from Flickr')
             return redirect('/')
