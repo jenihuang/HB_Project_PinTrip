@@ -57,6 +57,7 @@ function handleAddSubmit() {
   $('form.add-trip-form').on('submit', (evt) => {
     evt.preventDefault();
     alert('Photo added')
+    $(evt.target).find($('input')).hide();
 
     const formInputs = {
       'img_id': $(evt.target).data( "img_id" ),
@@ -69,12 +70,13 @@ function handleAddSubmit() {
     console.log(formInputs)
 
     $.post('/add-photo', formInputs, (results) => {
-      $(evt.target).submit.style.display="none";
     });
   });
 }
 
 handleAddSubmit();
+
+
 
 </script>
 

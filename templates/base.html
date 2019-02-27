@@ -13,7 +13,6 @@
   <link href="../static/css/style.css" rel="stylesheet">
 
 
-
   <script src="https://code.jquery.com/jquery.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
@@ -116,15 +115,17 @@ $("#search-city").on('keyup', getSuggestions);
 
 
 
-
 function addToInput(evt){
   console.log('triggered event')
   let clickedCity = $(evt.target).text();
-  console.log(clickedCity);
   $("#search-city").val(clickedCity);
 }
 
-$('p.dropdown-item').on('click', addToInput);
+
+$(document).on("click", 'p.dropdown-item', function(evt){
+    let clickedCity = $(evt.target).text();
+    $("#search-city").val(clickedCity);
+});
 
 </script>
 

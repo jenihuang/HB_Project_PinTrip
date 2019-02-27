@@ -63,6 +63,10 @@ class Photo(db.Model):
 
         return cls.query.filter_by(img_id=img_id).first()
 
+    def to_json(self):
+
+        return {"img_id":img_id, "url": url, "lon": lon, "lat": lat, "city_name":city_name}
+
 
 class Trip(db.Model):
     '''Trip boards created by a user.'''
