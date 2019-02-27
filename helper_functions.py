@@ -134,7 +134,7 @@ def search_photos_by_city(cityname, tag=''):
         with open(filename) as json_file:
             data = json.load(json_file)
 
-        results = json.loads(data)
+        photo_results = json.loads(data)
         print('used cache')
 
     else:
@@ -142,27 +142,32 @@ def search_photos_by_city(cityname, tag=''):
         data = flickr.photos.search(tags=tag,
                                     sort='interestingness-desc',
                                     accuracy='10', has_geo='1', lat=city_lat, lon=city_lon,
-                                    per_page='10', format='json')
+                                    per_page='50', format='json')
 
         results = json.loads(data)
-        photos_json = convert_photo_data(results, city)
+
+        if results.get('stat') == 'fail':
+            return None
+
+        photo_results = convert_photo_data(results, city)
         # json_data = json.dumps(photos_json)
 
         with open(filename, 'w') as outfile:
-            json.dump(photos_json, outfile)
+            json.dump(photo_results, outfile)
 
-    if results.get('stat') == 'fail':
-        return None
-    else:
-        return results
+        photo_results = json.loads(photo_results)
+
+    print(photo_results)
+    return photo_results
 
 
 def convert_photo_data(results, city):
+    '''given json results from API requests and city name, return json of all photo objects'''
 
     details = results['photos']['photo']
 
     '''creating empty list to store photos from api call'''
-    photos = []
+    photos = {}
 
     '''extracting url information from each photo in the results'''
     for item in range(len(details)):
@@ -175,12 +180,26 @@ def convert_photo_data(results, city):
         location = get_photo_location(img_id)
         lat = location.get('lat')
         lon = location.get('lon')
-        photo = Photo(img_id=img_id, url=source_url,
-                      lon=lon, lat=lat, city_name=city)
-        db.session.add(photo)
-        db.session.commit()
 
-        photos.append(img_id)
+        if Photo.get_photo(img_id):
+            obtained_photo = Photo.get_photo(img_id)
+
+        else:
+            photo = Photo(img_id=img_id, url=source_url,
+                          lon=lon, lat=lat, city_name=city)
+            db.session.add(photo)
+            db.session.commit()
+            print('photo added to db')
+
+            obtained_photo = Photo.get_photo(img_id)
+
+        photo_dict = obtained_photo.__dict__
+        del photo_dict['_sa_instance_state']
+        key = photo_dict['img_id']
+
+        if photo_dict:
+            photos[key] = photo_dict
+            print('added {}'.format(key))
 
     return json.dumps(photos)
 

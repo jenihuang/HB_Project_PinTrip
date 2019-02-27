@@ -45,7 +45,7 @@ class TestFlaskLogin(unittest.TestCase):
 
         result = self.client.get('/signup')
         self.assertIn(
-            b'Sign up!', result.data)
+            b'Register', result.data)
 
     def test_process_signup(self):
         ''' Test signup of new user '''
@@ -79,7 +79,7 @@ class TestFlaskLogin(unittest.TestCase):
 
         result = self.client.get('/login')
         self.assertIn(
-            b'Please Sign In', result.data)
+            b'Sign In', result.data)
 
     def test_process_login(self):
         ''' Test login process with correct user, invalid user, and wrong password '''
@@ -94,13 +94,13 @@ class TestFlaskLogin(unittest.TestCase):
             '/login', data={'email': 'blah@gmail.com', 'password': 'blahblah'},
             follow_redirects=True)
 
-        self.assertIn(b'Please Sign In', result.data)
+        self.assertIn(b'Sign In', result.data)
 
         result = self.client.post(
             '/login', data={'email': 'taylor@gmail.com',
                             'password': 'blahblah'}, follow_redirects=True)
 
-        self.assertIn(b'Please Sign In', result.data)
+        self.assertIn(b'Sign In', result.data)
 
     def test_logout(self):
         ''' Test logout route '''

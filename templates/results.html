@@ -10,9 +10,9 @@
     <h3>Search Results</h3>
   {% endif %}
     <section id="blocks">
-    {% for photo in photos %}
-    <div class="results">
-      {% if session.get('login') and trip %}
+    {% for id,photo in photos.items() %}
+    <div class="details">
+      {% if session.get('login') and trip and photo %}
         <img src="{{ photo.url }}" data-src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
         <br>
         <form class="add-trip-form"
@@ -28,7 +28,7 @@
         <input type="submit" class="btn btn-outline-dark my-2 my-sm-0 photobutton" value="Add to Trip">
       </form>
 
-      {% else %}
+      {% elif photo %}
       <img src="{{ photo.url }}" data-src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
       {% endif %}
     </div>

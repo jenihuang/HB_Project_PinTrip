@@ -54,8 +54,9 @@ class Photo(db.Model):
     def __repr__(self):  # pragma: no cover
         return '<Image photo_id={} url={}>'.format(self.img_id, self.url)
 
-    def as_dict(self):
-        return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
+    # does this work? from stackoverflow
+    # def as_dict(self):
+    #     return {c.name: str(getattr(self, c.name)) for c in self.__table__.columns}
 
     @classmethod
     def get_photo(cls, img_id):
@@ -96,6 +97,10 @@ class LikedTrip(db.Model):
 
     users = db.relationship(
         'User', secondary='trip_user_likes_rel', backref='liked_trips')
+
+    @classmethod
+    def get_liked(cls, trip_id):
+        return cls.query.filter_by(trip_id=trip_id).first()
 
 
 class City(db.Model):

@@ -27,7 +27,11 @@ Once the trip board is complete, users can view a map of their trip which pins a
 
 # Features
 
-Additional features include: Hashing passwords, Caching API responses, Autocomplete Cities implementation, Test coverage 95%
+Additional features include: 
+- Hashing passwords
+- Caching API responses
+- Implemented Autocomplete for City search
+- 95% Test coverage for all python files
 
 ### Home
 ![homepage](/screenshots/Homepage.png)

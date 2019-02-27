@@ -247,7 +247,7 @@ def remove_trip():
                     db.session.delete(liked_trip)
                     db.session.commit()
                 db.session.delete(liked)
-                db.sesison.commit()
+                db.session.commit()
 
             else:
                 pass
@@ -351,11 +351,15 @@ def process_results():
 
         trip = get_trip_by_user_city(user_id, city.name)
 
-        # call API function to get flickr photos for that city and tag, or cache
-        output = search_photos_by_city(city.name, tag)
+        # call API function to get flickr photos for that city and tag, orcache
+        photos = search_photos_by_city(city.name, tag)
+        # print(obtained_photos)
 
-        if output:
-            photos = convert_photo_data(output, city.name)
+        if photos:
+            print(photos.items())
+            # photos = json.loads(obtained_photos)
+            # print(type(photos))
+
             return render_template('results.html', photos=photos, trip=trip)
 
         else:
@@ -422,9 +426,11 @@ def add_to_favorites():
 
         # if trip is not in the favorites already, add trip to favorites in the database
         else:
-            trip = LikedTrip(trip_id=trip_id)
-            db.session.add(trip)
-            db.session.commit()
+            likedtrip = LikedTrip.get_liked(trip_id)
+            if not likedtrip:
+                trip = LikedTrip(trip_id=trip_id)
+                db.session.add(trip)
+                db.session.commit()
 
             fav = TripUserLikes(trip_id=trip_id, user_id=user_id)
             db.session.add(fav)
@@ -508,7 +514,6 @@ def autocomplete():
 
     prefix = request.args.get('prefix')
     results = t.prefix_search(prefix)
-    print(results)
     return jsonify(results)
 
 
