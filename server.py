@@ -15,37 +15,36 @@ from model import connect_to_db, db, User, Photo, Trip, City, TripPhotoRelations
 
 app = Flask(__name__)
 
-
 # key to use Flask session and debug toolbar
-app.secret_key = "SECRETSECRETSECRET"
+app.secret_key = "SECRET"
 
 # raises an error for undefined variables in jinja2
 app.jinja_env.undefined = StrictUndefined
 
-# map_box_key = os.environ.get('MABOX_KEY')
+map_box_key = os.environ.get('MABOX_KEY')
 
-CACHE = {}
+# CACHE = {}
 
 
-@app.route('/update')
-def update():
+# @app.route('/update')
+# def update():
 
-    POPOULAR_CITIES = ['amsterdam', 'bangkok', 'barcelona', 'beijing', 'boston',
-                       'cape town', 'dublin', 'havana', 'hong kong', 'kyoto',
-                       'london', 'monterey', 'montreal', 'napa', 'new york city',
-                       'paris', 'rome', 'san francisco', 'seattle', 'seoul',
-                       'shanghai', 'singapore', 'tokyo', 'toronto']
+#     POPOULAR_CITIES = ['amsterdam', 'bangkok', 'barcelona', 'beijing', 'boston',
+#                        'cape town', 'dublin', 'havana', 'hong kong', 'kyoto',
+#                        'london', 'monterey', 'montreal', 'napa', 'new york city',
+#                        'paris', 'rome', 'san francisco', 'seattle', 'seoul',
+#                        'shanghai', 'singapore', 'tokyo', 'toronto']
 
-    for city in POPOULAR_CITIES:
-        if city.title() not in CACHE:
-            try:
-                photos = update_cache(city)
-                if photos:
-                    CACHE[city.title()] = photos
-            except:
-                continue
+#     for city in POPOULAR_CITIES:
+#         if city.title() not in CACHE:
+#             try:
+#                 photos = update_cache(city)
+#                 if photos:
+#                     CACHE[city.title()] = photos
+#             except:
+#                 continue
 
-    return redirect('/')
+#     return redirect('/')
 
 
 @app.route('/')
