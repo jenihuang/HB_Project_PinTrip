@@ -3,8 +3,10 @@
 {% block title %} My Trips {% endblock %}
 
 {% block content %}
-<h2>Add a Trip!</h2>
-<a data-toggle="modal" href="#myModal" class="btn btn-primary">Create Board</a>
+<br>
+<div class="title">
+<a data-toggle="modal" href="#myModal" class="btn btn-primary addbutton"><i class="fas fa-plus"></i>  ADD A TRIP!</a>
+</div>
 <div class="modal fade" id="myModal">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -24,7 +26,6 @@
       </div>
     </div>
 </div>
-<br><br><br>
 
 {% if trips %}
   <section id="blocks">

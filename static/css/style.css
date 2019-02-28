@@ -3,10 +3,26 @@
     width: 100%;
     color: #222;
   }
+  div.title {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  margin: 10px;
+  padding: 10px;
+  flex: 0 1 31.5%;
+  }
+
+  .addbutton {
+  position: relative;
+  }
 
   h2 {
     text-align: center;
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: 'Lora', serif;
+    text-transform: uppercase;
+    margin: 10px;
+
   }
 
   nav
@@ -107,8 +123,15 @@
   }
 
   .love{
-    width: 3em;
-    height: 3em;
+    width: 2.5em;
+    height: 2.8em;
+    padding-top: 6px;
+  }
+
+  .mapicon{
+    width: 3.5em;
+    height: 3.5em;
+    padding: 10px;
   }
 
   .img-details{
@@ -194,6 +217,7 @@
   .btn-primary {
     background-color: grey;
     border: 1px solid grey;
+    padding: 10px;
   }
 
   .btn-primary:hover {
@@ -220,8 +244,6 @@
 
 
 /* login page */
-
-@import url('https://fonts.googleapis.com/css?family=Numans');
 
 body.login{
 background-image: url('../imgs/nyc.jpg');

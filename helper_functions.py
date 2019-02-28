@@ -134,7 +134,7 @@ def search_photos_by_city(cityname, tag=''):
         data = flickr.photos.search(tags=tag,
                                     sort='interestingness-desc',
                                     accuracy='10', has_geo='1', lat=city_lat,
-                                    lon=city_lon, per_page='100', format='json')
+                                    lon=city_lon, per_page='200', format='json')
         # convert data out of json format
         results = json.loads(data)
 

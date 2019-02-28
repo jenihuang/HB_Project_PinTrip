@@ -1,6 +1,4 @@
-# from pprint import pformat, pprint
-# import os
-# import flickrapi
+import os
 import hashlib
 import requests
 import requests_cache
@@ -22,29 +20,6 @@ app.secret_key = "SECRET"
 app.jinja_env.undefined = StrictUndefined
 
 map_box_key = os.environ.get('MAPBOX_KEY')
-
-# CACHE = {}
-
-
-# @app.route('/update')
-# def update():
-
-#     POPOULAR_CITIES = ['amsterdam', 'bangkok', 'barcelona', 'beijing', 'boston',
-#                        'cape town', 'dublin', 'havana', 'hong kong', 'kyoto',
-#                        'london', 'monterey', 'montreal', 'napa', 'new york city',
-#                        'paris', 'rome', 'san francisco', 'seattle', 'seoul',
-#                        'shanghai', 'singapore', 'tokyo', 'toronto']
-
-#     for city in POPOULAR_CITIES:
-#         if city.title() not in CACHE:
-#             try:
-#                 photos = update_cache(city)
-#                 if photos:
-#                     CACHE[city.title()] = photos
-#             except:
-#                 continue
-
-#     return redirect('/')
 
 
 @app.route('/')
