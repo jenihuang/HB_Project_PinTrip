@@ -37,7 +37,7 @@ class TestFlaskLogin(unittest.TestCase):
 
             result = self.client.get('/', follow_redirects=True)
 
-            self.assertIn(b'Add a Trip!', result.data)
+            self.assertIn(b'ADD A TRIP!', result.data)
             self.assertNotIn(b'SIGN UP', result.data)
 
     def test_show_signup(self):
@@ -72,7 +72,7 @@ class TestFlaskLogin(unittest.TestCase):
             '/signup', data={'email': 'blah@email.com', 'password': 'Abc123',
                              'fname': 'test', 'lname': 'test'},
             follow_redirects=True)
-        self.assertIn(b'Add a Trip!', result.data)
+        self.assertIn(b'ADD A TRIP!', result.data)
 
     def test_show_login(self):
         ''' Test show sign up page '''
@@ -88,7 +88,7 @@ class TestFlaskLogin(unittest.TestCase):
             '/login', data={'email': 'taylor@gmail.com', 'password': 'Abc123'},
             follow_redirects=True)
 
-        self.assertIn(b'Add a Trip!', result.data)
+        self.assertIn(b'ADD A TRIP!', result.data)
 
         result = self.client.post(
             '/login', data={'email': 'blah@gmail.com', 'password': 'blahblah'},
@@ -111,21 +111,21 @@ class TestFlaskLogin(unittest.TestCase):
 
             result = self.client.get('/logout', follow_redirects=True)
 
-            self.assertNotIn(b'Add a Trip!', session)
+            self.assertNotIn(b'ADD A TRIP!', session)
             self.assertIn(b'SIGN UP', result.data)
 
     def test_userhome_page(self):
         ''' Test user details homepage view for logged out and logged in user '''
 
         result = self.client.get("/1", follow_redirects=True)
-        self.assertNotIn(b"Add a Trip!", result.data)
+        self.assertNotIn(b"ADD A TRIP!", result.data)
         self.assertIn(b"SIGN UP", result.data)
 
         with self.client as c:
             with c.session_transaction() as sess:
                 sess['login'] = 1
             result = self.client.get('/1', follow_redirects=True)
-            self.assertIn(b"Add a Trip!", result.data)
+            self.assertIn(b"ADD A TRIP!", result.data)
 
     def test_tripdetails_page(self):
         ''' Test trip details page '''
@@ -134,7 +134,7 @@ class TestFlaskLogin(unittest.TestCase):
         result = self.client.post(
             '/view-trip', data={'trip': 1},
             follow_redirects=True)
-        self.assertIn(b'Saved Photos', result.data)
+        self.assertIn(b'San Francisco Trip', result.data)
         self.assertNotIn(b'Remove from Trip', result.data)
 
         ''' Tests logged in user sees remove photo option and does not see add trip to favorites option '''
@@ -152,7 +152,7 @@ class TestFlaskLogin(unittest.TestCase):
             follow_redirects=True)
 
         self.assertIn(b'Sorry no photos', result.data)
-        self.assertNotIn(b'Saved Photos', result.data)
+        self.assertNotIn(b'Monterey Trip', result.data)
 
     def test_add_trip(self):
         ''' Tests adding a trip to user page '''

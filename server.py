@@ -492,4 +492,7 @@ def autocomplete():
 if __name__ == "__main__":  # pragma: no cover
     app.debug = True
     connect_to_db(app)
+
+    # DebugToolbarExtension(app)
+
     app.run(host="0.0.0.0")

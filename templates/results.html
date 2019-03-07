@@ -14,7 +14,7 @@
     {% for id,photo in photos.items() %}
     <div class="details">
       {% if session.get('login') and trip and photo %}
-        <img src="{{ photo.url }}" data-src="{{ photo.url }}" id="{{ photo.img_id }}" class="img-responsive">
+        <img src="{{ photo.url }}" data-src="{{ photo.url }}" class="img-responsive">
         <form class="add-trip-form"
         data-img_id="{{photo.img_id}}"
         data-url="{{photo.url}}" 
@@ -26,6 +26,7 @@
         action="/add-photo"
         method="POST">
         <input type="image" name="submit" src="../static/imgs/love.png" border="0" alt="Submit" class="love" /> 
+        <img src="../static/imgs/love.png" border="0" class="grayheart">
       </form>
 
       {% elif photo %}
@@ -57,6 +58,7 @@ function handleAddSubmit() {
   $('form.add-trip-form').on('submit', (evt) => {
     evt.preventDefault();
     $(evt.target).find($('input')).hide();
+    $(evt.target).find($('img')).show();
 
     const formInputs = {
       'img_id': $(evt.target).data( "img_id" ),
