@@ -34,40 +34,40 @@ Additional features include:
 - 93% Test coverage for all python files
 
 ### Home
-![homepage](/screenshots/Homepage.png)
+![homepage](/gifs/homepage.gif)
 
 ### Login
-![login](/screenshots/Login.png)
+![login](/gifs/login.gif)
 
 ### Signup
-![signup](/screenshots/Register.png)
+![signup](/gifs/register.gif)
 
 ### Search Results
-![results](/screenshots/Results.png)
+![results](/gifs/results.gif)
 
 ### My Trips
-![user](/screenshots/Trips.png)
+![user](/gifs/mytrips.gif)
 
 ### Trip Details
-![view-trip](/screenshots/Details.png)
+![view-trip](/gifs/details.gif)
 
 ### Trip Map
-![get-map](/screenshots/Map.png)
+![get-map](/gifs/map.gif)
 
 ### Explore Trips
-![explore](/screenshots/Explore.png)
+![explore](/gifs/explore.gif)
 
 ### Favorite Trips
-![favorites](/screenshots/Favorites.png)
+![favorites](/gifs/fav.gif)
+
+### Autocomplete search
+![favorites](/gifs/autocomplete.gif)
 
 ### Results loadtime before
 ![favorites](/screenshots/Pre-Cache-Results.png)
 
 ### Results loadtime after
 ![favorites](/screenshots/Post-Cache-Results.png)
-
-### Autocomplete search
-![favorites](/screenshots/autocomplete.png)
 
 ### Test Coverage
 ![favorites](/screenshots/tests.png)
