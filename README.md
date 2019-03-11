@@ -42,7 +42,7 @@ Additional features include:
 ### Signup
 ![signup](/screenshots/Register.png)
 
-### Search Results with Autocomplete
+### Search Results
 ![results](/screenshots/Results.png)
 
 ### My Trips
@@ -59,6 +59,19 @@ Additional features include:
 
 ### Favorite Trips
 ![favorites](/screenshots/Favorites.png)
+
+### Results loadtime before
+![favorites](/screenshots/Pre-Cache-Results.png)
+
+### Results loadtime after
+![favorites](/screenshots/Post-Cache-Results.png)
+
+### Autocomplete search
+![favorites](/screenshots/autocomplete.png)
+
+### Test Coverage
+![favorites](/screenshots/tests.png)
+
 
 
 
