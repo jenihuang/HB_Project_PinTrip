@@ -126,6 +126,7 @@
     width: 2.5em;
     height: 2.8em;
     padding-top: 6px;
+    display: none
   }
 
   .grayheart {
@@ -134,7 +135,6 @@
     padding-top: 6px;
     -webkit-filter: grayscale(100%);
     filter: grayscale(100%);
-    display: none
   }
 
   .mapicon{
