@@ -42,11 +42,11 @@ Additional features include:
 ### Signup
 ![signup](/gifs/register.gif)
 
-### Search Results
-![results](/gifs/results.gif)
-
 ### My Trips
 ![user](/gifs/mytrips.gif)
+
+### Search Results
+![results](/gifs/results.gif)
 
 ### Trip Details
 ![view-trip](/gifs/details.gif)
