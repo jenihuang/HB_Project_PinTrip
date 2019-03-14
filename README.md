@@ -8,6 +8,8 @@ The user's personal and favorite trips are saved in the database and users can r
 
 Once the trip board is complete, users can view a map of their trip which pins all of the favorite photo locations. 
 
+Click here for a video demo: https://youtu.be/VjzAr7sFkWo
+
 # Technologies
 
 - Python
