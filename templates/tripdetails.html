@@ -14,14 +14,12 @@
         <input type="hidden" name="trip" value={{ trip.trip_id }}>
         <input type="hidden" name="user" value={{ session.get('login') }}>
         <input type="image" name="submit" src="../static/imgs/love.png" border="0" alt="Submit" class="mapicon" />
-<!--         <input type="submit" class="btn btn-primary" value="ADD TO FAV"> -->
       </form>
         {% endif %}
 
       <form action="/get-map" method="POST">
         <input type="hidden" name="trip-map" value={{ trip.trip_id }}>
         <input type="image" name="submit" src="../static/imgs/map.png" border="0" alt="Submit" class="mapicon" />
-<!--         <input type="submit" class="btn btn-success" value="MAP"> -->
       </form>
 </div>
 
