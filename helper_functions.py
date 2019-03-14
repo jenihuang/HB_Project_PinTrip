@@ -102,7 +102,7 @@ def search_photos_by_city(cityname, tag=''):
     photo objects from cache or API call'''
 
     # change directory to cache folder to save items easily
-    os.chdir('/home/ubuntu/PinTrip/cache')
+    os.chdir('/home/ubuntu/HB_Project_PinTrip/cache')
     # cw = os.getcwd()
     # os.chdir('{}/cache'.format(cw))
 
