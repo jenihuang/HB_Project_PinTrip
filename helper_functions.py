@@ -3,7 +3,6 @@ import string
 import os
 import flickrapi
 import json
-# from collections import OrderedDict
 from flask import Flask
 from model import *
 
@@ -103,7 +102,9 @@ def search_photos_by_city(cityname, tag=''):
     photo objects from cache or API call'''
 
     # change directory to cache folder to save items easily
-    os.chdir('/home/vagrant/src/PinTrip/cache')
+    os.chdir('/home/ubuntu/PinTrip/cache')
+    # cw = os.getcwd()
+    # os.chdir('{}/cache'.format(cw))
 
     # convert user input city to correct format to match database
     city = cityname.strip()
@@ -117,7 +118,7 @@ def search_photos_by_city(cityname, tag=''):
     # create filename as city and tag
     filename = '{}{}.json'.format(city, tag)
     # set filepath to the cached file
-    filepath = '/cache/{}'.format(filename)
+    filepath = '/{}'.format(filename)
 
     # check if file exists in the cache already
     if os.path.isfile(filename):
